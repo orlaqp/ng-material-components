@@ -14,6 +14,7 @@ export class SumService {
      */
     public calculate(...addends: number[]): void {
         this.sum = 0;
+        
         for (const addend of addends) {
             this.sum += addend;
         }
