@@ -4,7 +4,14 @@ import { ActionsService } from './actions.service';
 
 @Component({
   selector: 'actions',
-  templateUrl: 'actions.component.pug',
+  template: `
+    <ul class="actions c-{{color}} {{class}}" 
+        [ngClass]="{ 'actions-alt': alt, 'dropdown': dropdown }" 
+        [class.actions]="!showBig" 
+        [class.top-menu]="showBig">
+            <li *ngFor="let item of actionItems" [actionItem]="item"></li>
+    </ul>
+  `,
   providers: [ ActionsService ],
 })
 export class ActionsComponent implements OnInit {

@@ -1,3 +1,5 @@
+https://github.com/robisim74/angular-library-starter
+
 # ng-material-components
 [![Build Status](https://travis-ci.org/orlaqp/ng-material-components.svg?branch=master)](https://travis-ci.org/orlaqp/ng-material-components)
 >Build an Angular library compatible with AoT compilation &amp; Tree shaking.
@@ -5,7 +7,7 @@
 This starter allows you to create a library for **Angular 2+** apps written in _TypeScript_, _ES6_ or _ES5_. 
 The project is based on the official _Angular_ packages.
 
-Get the [Changelog](https://github.com/robisim74/ng-material-components/blob/master/CHANGELOG.md).
+Get the [Changelog](https://github.com/orlaqp/ng-material-components/blob/master/CHANGELOG.md).
 
 ## Contents
 * [1 Project structure](#1)

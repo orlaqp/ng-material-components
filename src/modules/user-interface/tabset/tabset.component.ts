@@ -4,7 +4,27 @@ import {TabDirective} from './tab.directive';
 // todo: fix? mixing static and dynamic tabs position tabs in order of creation
 @Component({
   selector: 'tabset',
-  templateUrl: 'tabset.component.pug',
+  template: `
+    <ul class="tab-nav tn-justified {{class}}" role="tablist" (click)="$event.preventDefault()" [ngClass]="classMap" [class.ts-alt]="alt">
+      <li 
+        class="nav-item" 
+        *ngFor="let tabz of tabs"
+        [class.active]="tabz.active"
+        [class.disabled]="tabz.disabled"
+        role="presentation">
+          <a class="nav-link" href="" [class.active]="tabz.active" [class.disabled]="tabz.disabled" (click)="tabClicked(tabz)">
+            <i class="zmdi zmdi-{{tabz.icon}}" *ngIf="tabz.icon" [ngClass]="{ 'icon-tab': iconTab }"></i>
+            <span [ngTransclude]="tabz.headingRef">{{tabz.heading}}</span>
+            <span *ngIf="tabz.removable">
+              <span class="zmdi zmdi-close-circle" (click)="$event.preventDefault(); removeTab(tabz);"></span>
+            </span>
+          </a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <ng-content></ng-content>
+    </div>
+  `,
 })
 export class TabsetComponent implements OnInit, OnDestroy {
 

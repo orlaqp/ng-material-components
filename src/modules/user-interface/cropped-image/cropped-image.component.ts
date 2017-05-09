@@ -3,7 +3,17 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'cropped-image',
-    templateUrl: 'cropped-image.component.pug',
+    template: `
+        <div class="layout-column layout-align-center-center">
+            <div class="ci-cropper {{class}}" [style.width.px]="width" [style.height.px]="width">
+                <div class="cropped-image" [style.width.px]="width" [style.height.px]="width">
+                    <img *ngIf="image" src="{{imageUrl}}" [attr.style]="croppedImageStyle"/>
+                </div>
+            </div>
+            <div class="ci-footer text-center" [class.ci-alt]="alt" [style.margin-top.px]="textMargin">
+                {{ text }}</div>
+        </div>
+    `,
     host: { '[style.position]': 'relative' },
 })
 export class CroppedImageComponent {

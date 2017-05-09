@@ -5,7 +5,11 @@ import { MenuItem } from '../../../models/menu-item';
 
 @Component({
     selector: 'side-menu',
-    templateUrl: 'side-menu.component.pug',
+    template: `
+        <ul class="main-menu {{class}}">
+            <side-menu-item *ngFor="let item of items" [item]="item" [alt]="alt"></side-menu-item>
+        </ul>
+    `,
     providers: [ MenuService ],
 })
 export class SideMenuComponent implements OnInit, OnDestroy {

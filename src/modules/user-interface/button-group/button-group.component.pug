@@ -1,7 +1,0 @@
-.btn-group(class="btn-group-{{size}} {{class}}")
-    button.btn.waves-effect(
-        *ngFor="let o of options"
-        type='button',
-        class="btn-{{type}}",
-        (click)="activateOption(o)",
-        [class.active]="o === activeOption") {{o}}

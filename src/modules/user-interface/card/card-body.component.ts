@@ -2,7 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
     selector: 'card-body',
-    templateUrl: 'card-body.component.pug',
+    template: `
+        <div class="card-body" [class.card-padding]="padded">
+            <ng-content></ng-content>
+        </div>
+    `,
 })
 export class CardBodyComponent implements OnInit {
 

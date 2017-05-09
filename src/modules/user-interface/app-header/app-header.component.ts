@@ -4,7 +4,36 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
-    templateUrl: 'app-header.component.pug',
+    template: `
+        <header class="clearfix animated slideInDown {{class}}" id="header" [attr.data-current-skin]="color">
+            <ul class="header-inner">
+                <!-- menu trigger-->
+                <li id="menu-trigger" [attr.data-trigger]="'#sidebar'" *ngIf="addMenuTrigger && !backActive" [class.open]="sidebarOpen" (click)="toggleSidebar()">
+                <div class="line-wrap">
+                    <div class="line top"></div>
+                    <div class="line center"></div>
+                    <div class="line bottom"></div>
+                </div>
+                </li>
+                <li id="menu-trigger" *ngIf="backActive" (click)="backActionClicked()" [class.open]="backActive">
+                <div class="line-wrap">
+                    <div class="line top"></div>
+                    <div class="line center"></div>
+                    <div class="line bottom"></div>
+                </div>
+                </li>
+                <!-- brand-->
+                <li class="logo" *ngIf="brand"><a [href]="logoHref">{{brand}}</a></li>
+                <!-- logo-->
+                <li *ngIf="!brand && logo"><a class="m-l-10" [href]="logoHref"><img [src]="logoPath"/></a></li>
+                <li class="pull-right" *ngIf="actions">
+                <actions color="white" [actionItems]="actions" [showBig]="true" (actionClicked)="headerActionClicked($event)"></actions>
+                </li>
+            </ul>
+            <!-- for extra content injection-->
+            <ng-content></ng-content>
+        </header>
+    `,
 })
 export class AppHeaderComponent {
     @Input() class: string;

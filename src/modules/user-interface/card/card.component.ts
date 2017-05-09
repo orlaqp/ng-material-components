@@ -2,7 +2,11 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'card',
-    templateUrl: 'card.component.pug',
+    template: `
+        <div class="card {{depthClass}} {{topDepthClass}} {{class}}">
+            <ng-content></ng-content>
+        </div>
+    `,
 })
 export class CardComponent {
     @Input() depth: number;

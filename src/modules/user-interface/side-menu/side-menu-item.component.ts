@@ -15,7 +15,13 @@ import { MenuItem } from '../../../models/menu-item';
 
 @Component({
     selector: 'side-menu-item',
-    templateUrl: 'side-menu-item.component.pug',
+    template: `
+        <li class="{{activeClass}}" [ngClass]="{ 'toggled': expanded, 'sub-menu': item.children }" (click)="onItemClicked($event)"><a href="" (click)="$event.preventDefault()" [class.fc-alt]="alt"><i class="zmdi zmdi-{{item.icon}}" *ngIf="item.icon"></i>{{item.title}}</a>
+            <ul [class.hidden]="!expanded" *ngIf="item.children">
+                <side-menu-item [item]="child" *ngFor="let child of item.children"></side-menu-item>
+            </ul>
+        </li>
+    `,
     // animations: [
     //     trigger('isVisibleChanged', [
     //         state('true', style({ opacity: 1 })),

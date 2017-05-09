@@ -2,7 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'card-action',
-    templateUrl: 'card-action.component.pug',
+    template: `
+        <button class="btn btn-float waves-effect bgm-{{color}}" (click)="onClicked($event)">
+            <i class="zmdi zmdi-{{icon}}"></i>
+        </button>
+    `,
 })
 export class CardActionComponent {
 

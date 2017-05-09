@@ -2,7 +2,11 @@ import { Component, AfterViewInit, Input } from '@angular/core';
 
 @Component({
     selector: 'card-header',
-    templateUrl: 'card-header.component.pug',
+    template: `
+        <div class="card-header {{customColor}}" [class.card-padding]="padded" [class.ch-alt]="defaultHeader">
+            <ng-content></ng-content>
+        </div>
+    `,
 })
 export class CardHeaderComponent implements AfterViewInit {
 

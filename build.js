@@ -52,6 +52,14 @@ exec(`node ../../scripts/map-sources -f ${PACKAGE}.umd.min.js`);
 cd(`..`);
 cd(`..`);
 
+echo(`Processing styles`);
+exec(`node-sass --output-style compressed src/styles/app.scss > ${BUNDLES_DIR}/app.css`);
+cp(`-R`, `src/styles/img`, `${BUNDLES_DIR}`);
+cp(`-R`, `src/styles/fonts`, `${BUNDLES_DIR}`);
+echo(chalk.green(`Style compilation completed`));
+
+
+
 echo(chalk.green(`Bundling completed`));
 
 rm(`-Rf`, `${NPM_DIR}/*.js`);

@@ -2,7 +2,23 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'bw-button',
-    templateUrl: 'button.component.pug',
+    template: `
+        <button 
+            class="btn waves-effect bgm-{{color}} c-{{simpleColor}} btn-{{size}} {{class}}"
+            type="{{type}}"
+            [class.btn-icon-text]="iconAndtext"
+            [class.btn-block]="block"
+            [class.waves-circle]="circular"
+            [class.waves-float]="circular"
+            [class.btn-icon]="circular"
+            [class.btn-rounded]="rounded"
+            [class.btn-link]="simple"
+            [disabled]="disabled"
+            (click)="onClick($event)">
+                <i class="zmdi zmdi-{{icon}}" *ngIf="icon"></i>
+                {{title}}
+        </button>
+    `,
 })
 export class ButtonComponent implements OnInit {
     @Input() class: string;
