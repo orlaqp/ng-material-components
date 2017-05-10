@@ -2,9 +2,7 @@ Thanks to:
 
 https://github.com/robisim74/angular-library-starter
 
-*** How To Use
-
-
+*** How To Use ***
 
 
 ```
