@@ -1,6 +1,6 @@
 {
     "name": "ng-material-components",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Material components, directives and other usefull resource bundled together to speed your de development",
     "main": "./bundles/ng-material-components.umd.js",
     "module": "./modules/ng-material-components.es5.js",
