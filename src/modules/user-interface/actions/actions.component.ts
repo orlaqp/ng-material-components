@@ -3,28 +3,28 @@ import { MenuItem } from '../../../models/menu-item';
 import { ActionsService } from './actions.service';
 
 @Component({
-  selector: 'actions',
+  providers: [ ActionsService ],
+  selector: 'bw-actions',
   template: `
-    <ul class="actions c-{{color}} {{class}}" 
-        [ngClass]="{ 'actions-alt': alt, 'dropdown': dropdown }" 
-        [class.actions]="!showBig" 
+    <ul class="actions c-{{color}} {{class}}"
+        [ngClass]="{ 'actions-alt': alt, 'dropdown': dropdown }"
+        [class.actions]="!showBig"
         [class.top-menu]="showBig">
-            <li *ngFor="let item of actionItems" [actionItem]="item"></li>
+            <li *ngFor="let item of actionItems" bwActionItem="item"></li>
     </ul>
   `,
-  providers: [ ActionsService ],
 })
 export class ActionsComponent implements OnInit {
-    @Input() actionItems: MenuItem[];
-    @Input() alt: boolean = false;
-    @Input() showBig: boolean = false;
-    @Input() color: string = 'light-gray';
-    @Input() class: string;
+    @Input() public actionItems: MenuItem[];
+    @Input() public alt: boolean = false;
+    @Input() public showBig: boolean = false;
+    @Input() public color: string = 'light-gray';
+    @Input() public class: string;
 
-    @Output() actionClicked = new EventEmitter();
+    @Output() private actionClicked = new EventEmitter();
 
     constructor(private actionsService: ActionsService) {
-        actionsService.actionClicked$.subscribe(actionItem => {
+        actionsService.actionClicked$.subscribe((actionItem) => {
             this.actionClicked.emit(actionItem);
         });
     }
@@ -33,7 +33,7 @@ export class ActionsComponent implements OnInit {
         this.actionsService.showBig = this.showBig;
 
         if (!this.actionItems || this.actionItems.length === 0) {
-            throw 'Actions component need actions to show';
+            throw new Error('Actions component need actions to show');
         }
     }
 

@@ -2,23 +2,23 @@ import { Renderer } from '@angular/core';
 
 export class RendererHelper {
 
-    constructor(private _renderer: Renderer) { }
+    constructor(private renderer: Renderer) { }
 
-    addClass(ele: any, classNames: string): void {
-        let r = this._renderer;
-        let classes: string[] = classNames.split(' ');
+    public addClass(ele: any, classNames: string): void {
+        const r = this.renderer;
+        const classes: string[] = classNames.split(' ');
 
-        classes.forEach(c => {
+        classes.forEach((c) => {
             r.setElementClass(ele, c, true);
         });
     }
 
-    addAttributes(ele: any, attrs: any): void {
-        let r = this._renderer;
+    public addAttributes(ele: any, attrs: any): void {
+        const r = this.renderer;
 
-        for (let key in attrs) {
+        Object.keys(attrs).forEach((key) => {
             r.setElementAttribute(ele, key, attrs[key]);
-        }
+        });
     }
 
 }

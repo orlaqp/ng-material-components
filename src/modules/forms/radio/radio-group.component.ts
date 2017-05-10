@@ -1,3 +1,4 @@
+import { OnInit } from '@angular/core/core';
 // from here: https://github.com/pleerock/ng2-radio-group
 
 import { Component, Input, ElementRef } from '@angular/core';
@@ -6,21 +7,21 @@ import { InputBase } from '../input-base/input-base.component';
 import { RadioGroupService } from './radio-group.service';
 
 @Component({
-    selector: 'radio-group',
+    providers: [ RadioGroupService ],
+    selector: 'bw-radio-group',
     template: `
         <div class="radio-group" [class.fc-alt]="alt">
             <ng-content></ng-content>
         </div>
     `,
-    providers: [ RadioGroupService ]
 })
-export class RadioGroupComponent extends InputBase {
+export class RadioGroupComponent extends InputBase implements OnInit {
 
-    @Input() fg: FormGroup;
-    @Input() field: string;
-    @Input() disabled: boolean = false;
-    @Input() defaultValue: string;
-    @Input() alt: boolean;
+    @Input() public fg: FormGroup;
+    @Input() public field: string;
+    @Input() public disabled: boolean = false;
+    @Input() public defaultValue: string;
+    @Input() public alt: boolean;
 
     constructor(el: ElementRef, private service: RadioGroupService) {
         super(el);
@@ -37,6 +38,8 @@ export class RadioGroupComponent extends InputBase {
         this.service.defaultValue = this.defaultValue;
     }
 
-    public addValidators(): void { }
+    public addValidators(): void {
+        // nothign here
+    }
 
 }

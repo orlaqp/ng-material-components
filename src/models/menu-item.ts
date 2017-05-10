@@ -15,7 +15,7 @@ export class MenuItem {
     public originalIcon?: string;
 
     /**
-     * Zmdi icon 
+     * Zmdi icon
      */
     public icon?: string;
 

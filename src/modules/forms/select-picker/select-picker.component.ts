@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { selectPickerTemplate } from './select-picker.template';
 import { Component, Input, ElementRef, OnChanges } from '@angular/core';
 import {
@@ -15,33 +16,33 @@ import {
 processPolyfills();
 
 @Component({
-    selector: 'select-picker',
+    selector: 'bw-select-picker',
     template: selectPickerTemplate,
 })
 export class SelectPickerComponent extends InputBase implements OnChanges {
 
-    @Input() fg: FormGroup;
-    @Input() field: string;
-    @Input() disabled: boolean;
-    @Input() placeholder: string;
-    @Input() alt: boolean;
-    @Input() leftIcon: string;
-    @Input() rightIcon: string;
+    @Input() public fg: FormGroup;
+    @Input() public field: string;
+    @Input() public disabled: boolean;
+    @Input() public placeholder: string;
+    @Input() public alt: boolean;
+    @Input() public leftIcon: string;
+    @Input() public rightIcon: string;
 
     // options
-    @Input() items: SelectionItem[];
-    @Input() multiple: boolean = false;
-    @Input() autofocus: boolean = false;
+    @Input() public items: SelectionItem[];
+    @Input() public multiple: boolean = false;
+    @Input() public autofocus: boolean = false;
 
-    @Input() noneSelectedText: string = 'Nothing selected';
-    @Input() noneResultsText: string = 'No results matched ';
-    @Input() multipleSeparator: string = ', ';
-    @Input() liveSearch: boolean = false;
-    @Input() liveSearchPlaceholder: string = null;
-    @Input() liveSearchStyle: string = 'contains'; // or startsWith
-    @Input() maxOptions: number = 100;
-    @Input() isMobile: boolean = false;
-    @Input() tickIcon: string = 'zmdi-check';
+    @Input() public noneSelectedText: string = 'Nothing selected';
+    @Input() public noneResultsText: string = 'No results matched ';
+    @Input() public multipleSeparator: string = ', ';
+    @Input() public liveSearch: boolean = false;
+    @Input() public liveSearchPlaceholder: string | null = null;
+    @Input() public liveSearchStyle: string = 'contains'; // or startsWith
+    @Input() public maxOptions: number = 100;
+    @Input() public isMobile: boolean = false;
+    @Input() public tickIcon: string = 'zmdi-check';
 
 
     // @Input() selectAllText: string = 'Select All';
@@ -181,13 +182,15 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         }
     }
 
-    private _filterResults(filter: string) {
+    private _filterResults(filter: string | null) {
         let contains = this.liveSearchStyle === 'contains';
 
         if (!filter || filter === '') {
             this.filteredItems = this._clonedItems;
         } else {
             this.filteredItems = this._clonedItems.filter(item => {
+
+                if (!item || !item.title) { return false; }
 
                 return contains ?
                     item.title.toLowerCase().includes(filter.toLowerCase()) :

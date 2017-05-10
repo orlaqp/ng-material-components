@@ -3,12 +3,13 @@ import { MenuItem } from '../../../models/menu-item';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-header',
+    selector: 'bw-app-header',
     template: `
         <header class="clearfix animated slideInDown {{class}}" id="header" [attr.data-current-skin]="color">
             <ul class="header-inner">
                 <!-- menu trigger-->
-                <li id="menu-trigger" [attr.data-trigger]="'#sidebar'" *ngIf="addMenuTrigger && !backActive" [class.open]="sidebarOpen" (click)="toggleSidebar()">
+                <li id="menu-trigger" [attr.data-trigger]="'#sidebar'" *ngIf="addMenuTrigger && !backActive"
+                    [class.open]="sidebarOpen" (click)="toggleSidebar()">
                 <div class="line-wrap">
                     <div class="line top"></div>
                     <div class="line center"></div>
@@ -27,7 +28,8 @@ import { Router } from '@angular/router';
                 <!-- logo-->
                 <li *ngIf="!brand && logo"><a class="m-l-10" [href]="logoHref"><img [src]="logoPath"/></a></li>
                 <li class="pull-right" *ngIf="actions">
-                <actions color="white" [actionItems]="actions" [showBig]="true" (actionClicked)="headerActionClicked($event)"></actions>
+                <bw-actions color="white" bwActionItems="actions" [showBig]="true"
+                    (actionClicked)="headerActionClicked($event)"></bw-actions>
                 </li>
             </ul>
             <!-- for extra content injection-->
@@ -36,32 +38,32 @@ import { Router } from '@angular/router';
     `,
 })
 export class AppHeaderComponent {
-    @Input() class: string;
-    @Input() color: string;
-    @Input() addMenuTrigger: boolean;
-    @Input() brand: string;
-    @Input() sidebarOpen: boolean = false;
-    @Input() actions: MenuItem[];
-    @Input() logoPath: string;
-    @Input() logoHref: string = '/';
-    @Input() backActive: boolean = false;
+    @Input() public class: string;
+    @Input() public color: string;
+    @Input() public addMenuTrigger: boolean;
+    @Input() public brand: string;
+    @Input() public sidebarOpen: boolean = false;
+    @Input() public actions: MenuItem[];
+    @Input() public logoPath: string;
+    @Input() public logoHref: string = '/';
+    @Input() public backActive: boolean = false;
 
-    @Output() onSidebarToggle = new EventEmitter();
-    @Output() onActionClicked = new EventEmitter();
-    @Output() onbackActionClicked = new EventEmitter();
+    @Output() private onSidebarToggle = new EventEmitter();
+    @Output() private onActionClicked = new EventEmitter();
+    @Output() private onbackActionClicked = new EventEmitter();
 
-    constructor(private _router: Router) { }
+    constructor(private router: Router) { }
 
-    toggleSidebar(): void {
+    public toggleSidebar(): void {
         this.sidebarOpen = !this.sidebarOpen;
         this.onSidebarToggle.emit(this.sidebarOpen);
     }
 
-    headerActionClicked(item: MenuItem) {
+    public headerActionClicked(item: MenuItem) {
         this.onActionClicked.emit(item);
     }
 
-    backActionClicked() {
+    public backActionClicked() {
          this.onbackActionClicked.emit();
     }
 }

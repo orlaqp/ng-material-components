@@ -1,7 +1,7 @@
 import {Directive, TemplateRef} from '@angular/core';
 import {TabDirective} from './tab.directive';
 
-@Directive({selector: '[tabHeading]'})
+@Directive({selector: '[bwTabHeading]'})
 export class TabHeadingDirective {
   public templateRef: TemplateRef<any>;
   public constructor(templateRef: TemplateRef<any>, tab: TabDirective) {

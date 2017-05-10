@@ -1,19 +1,17 @@
 import { Component, AfterViewInit, Input } from '@angular/core';
 
 @Component({
-    selector: 'card-header',
+    selector: 'bw-card-header',
     template: `
         <div class="card-header {{customColor}}" [class.card-padding]="padded" [class.ch-alt]="defaultHeader">
             <ng-content></ng-content>
         </div>
     `,
 })
-export class CardHeaderComponent implements AfterViewInit {
+export class CardHeaderComponent {
 
-    @Input() padded: boolean = false;
-    @Input() color: string = 'default';
-
-    ngAfterViewInit() { }
+    @Input() public padded: boolean = false;
+    @Input() public color: string = 'default';
 
     get defaultHeader(): boolean {
         return this.color === 'default';

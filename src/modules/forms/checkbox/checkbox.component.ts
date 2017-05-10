@@ -8,7 +8,7 @@ import { TypeEnum } from '../../../models/type-enum';
  *
  */
 @Component({
-    selector: 'checkbox',
+    selector: 'bw-checkbox',
     template: `
         <div class="checkbox m-b-25" [class.fc-alt]="alt">
             <label>

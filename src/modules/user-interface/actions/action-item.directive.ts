@@ -3,16 +3,16 @@ import { MenuItem } from '../../../models/menu-item';
 import { ActionsService } from './actions.service';
 
 
-@Directive({ selector: '[actionItem]' })
+@Directive({ selector: '[bwActionItem]' })
 export class ActionItemDirective implements AfterViewInit {
 
-    @Input() actionItem: MenuItem;
+    @Input() public actionItem: MenuItem;
 
-    constructor(private _el: ElementRef, private _renderer: Renderer, private _actionsService: ActionsService) { }
+    constructor(private el: ElementRef, private renderer: Renderer, private actionsService: ActionsService) { }
 
     public ngAfterViewInit() {
         // add anchor
-        this._createAnchor(this._el.nativeElement, this.actionItem);
+        this._createAnchor(this.el.nativeElement, this.actionItem);
     }
 
     @HostListener('click', ['$event'])
@@ -20,61 +20,61 @@ export class ActionItemDirective implements AfterViewInit {
 
         $event.preventDefault();
 
-        let item: MenuItem = menuItem ? menuItem : this.actionItem;
+        const item: MenuItem = menuItem ? menuItem : this.actionItem;
 
         // only send notification when the item does not have children
         if (!item.children) {
-            this._actionsService.announceAction(item);
+            this.actionsService.announceAction(item);
         }
     }
 
     private _createAnchor(ele: any, menuItem: MenuItem, submenu: boolean = false) {
-        var anchor = this._renderer.createElement(ele, 'a');
-        this._renderer.setElementAttribute(anchor, 'href', '');
+        const anchor = this.renderer.createElement(ele, 'a');
+        this.renderer.setElementAttribute(anchor, 'href', '');
 
         if (submenu) {
-            this._renderer.listen(anchor, 'click', (event: MouseEvent) => {
+            this.renderer.listen(anchor, 'click', (event: MouseEvent) => {
                 this.onActionClicked(event, menuItem);
             });
         }
 
         // add icon if it was provided
-        let icon = menuItem.icon;
+        const icon = menuItem.icon;
 
         if (icon) {
-            var i = this._renderer.createElement(anchor, 'i');
+            const i = this.renderer.createElement(anchor, 'i');
 
-            this._renderer.setElementClass(i, 'zmdi', true);
-            this._renderer.setElementClass(i, `zmdi-${icon}`, true);
+            this.renderer.setElementClass(i, 'zmdi', true);
+            this.renderer.setElementClass(i, `zmdi-${icon}`, true);
 
-            if (this._actionsService.showBig) {
-                this._renderer.setElementClass(i, 'tm-icon', true);
+            if (this.actionsService.showBig) {
+                this.renderer.setElementClass(i, 'tm-icon', true);
             }
         }
 
         // add title if it was provided
-        let title = menuItem.title;
+        const title = menuItem.title;
 
         if (title) {
-            this._renderer.createText(anchor, title);
+            this.renderer.createText(anchor, title);
         }
 
         if (menuItem.children) {
             // add dropwn class
-            this._renderer.setElementClass(ele, 'dropdown', true);
-            this._renderer.setElementAttribute(ele, 'data-toggle', 'dropdown');
+            this.renderer.setElementClass(ele, 'dropdown', true);
+            this.renderer.setElementAttribute(ele, 'data-toggle', 'dropdown');
 
-            let ul = this._renderer.createElement(ele, 'ul');
-            this._renderer.setElementClass(ul, 'dropdown-menu', true);
-            this._renderer.setElementClass(ul, 'dm-icon', true);
-            this._renderer.setElementClass(ul, 'dropdown-menu-right', true);
+            const ul = this.renderer.createElement(ele, 'ul');
+            this.renderer.setElementClass(ul, 'dropdown-menu', true);
+            this.renderer.setElementClass(ul, 'dm-icon', true);
+            this.renderer.setElementClass(ul, 'dropdown-menu-right', true);
 
             if (!this.actionItem || !this.actionItem.children) {
                 return;
             }
 
             this.actionItem.children.forEach((item: MenuItem) => {
-                let li = this._renderer.createElement(ul, 'li');
+                const li = this.renderer.createElement(ul, 'li');
 
                 this._createAnchor(li, item, true);
             });

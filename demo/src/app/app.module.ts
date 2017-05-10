@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { 
   SumService,
   ArithmeticModule,
-  MaterialUserInterfaceModule } from 'ng-material-components/modules/ng-material-components';
+  MaterialUserInterfaceModule, MaterialFormsModule } from 'ng-material-components/modules/ng-material-components';
 
 import { AppComponent } from './app.component';
 
@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
     HttpModule,
     ArithmeticModule.forRoot(),
     MaterialUserInterfaceModule.forRoot(),
+    MaterialFormsModule.forRoot(),
   ],
   providers: [ SumService ],
   bootstrap: [AppComponent]

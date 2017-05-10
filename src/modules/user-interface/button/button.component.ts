@@ -3,7 +3,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'bw-button',
     template: `
-        <button 
+        <button
             class="btn waves-effect bgm-{{color}} c-{{simpleColor}} btn-{{size}} {{class}}"
             type="{{type}}"
             [class.btn-icon-text]="iconAndtext"
@@ -21,39 +21,38 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
     `,
 })
 export class ButtonComponent implements OnInit {
-    @Input() class: string;
-    @Input() title: string;
-    @Input() color: string;
-    @Input() icon: string;
-    @Input() block: boolean;
-    @Input() circular: boolean;
-    @Input() rounded: boolean;
-    @Input() simple: boolean;
-    @Input() type = 'button';
+    public simpleColor: string;
 
-    @Input() size: string = ''; // lg, sm, xs
-    @Input() disabled: boolean;
+    @Input() public class: string;
+    @Input() public title: string;
+    @Input() public color: string;
+    @Input() public icon: string;
+    @Input() public block: boolean;
+    @Input() public circular: boolean;
+    @Input() public rounded: boolean;
+    @Input() public simple: boolean;
+    @Input() public type = 'button';
 
-    @Output() clicked = new EventEmitter();
+    @Input() public size: string = ''; // lg, sm, xs
+    @Input() public disabled: boolean;
 
-    simpleColor: string;
-
-    constructor() { }
+    @Output() private clicked = new EventEmitter();
 
     get iconAndtext(): boolean {
         return this.title !== undefined && this.icon !== undefined && !this.circular;
     }
 
-    ngOnInit() {
+    public onClick(e: MouseEvent): void {
+        e.preventDefault();
+
+        this.clicked.emit(undefined);
+    }
+
+    public ngOnInit() {
         if (this.simple) {
             this.simpleColor = this.color;
             this.color = '';
         }
     }
 
-    onClick(e: MouseEvent): void {
-        e.preventDefault();
-
-        this.clicked.emit(undefined);
-    }
 }

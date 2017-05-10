@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'bw-header',
@@ -8,11 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
         </div>
     `,
 })
-export class HeaderComponent implements OnInit {
-    @Input() class: string;
-    @Input() block: boolean;
-
-    constructor() { }
-
-    ngOnInit() { }
+export class HeaderComponent {
+    @Input() public class: string;
+    @Input() public block: boolean;
 }

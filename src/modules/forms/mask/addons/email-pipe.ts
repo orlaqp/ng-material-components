@@ -7,21 +7,26 @@ const dotDot = '..';
 const emptyArray: any[] = [];
 const allDotsRegExp = /\./g;
 
-export interface EmailPipeConfig {
+export interface IEmailPipeConfig {
     currentCaretPosition: number;
     rawValue?: string;
     previousConformedValue?: string;
     placeholderChar: string;
 }
 
-export default function emailPipe(conformedValue: string, config: EmailPipeConfig): any {
-    const {currentCaretPosition, rawValue, previousConformedValue, placeholderChar} = config;
+export default function emailPipe(conformedValue: string, config: IEmailPipeConfig): any {
+    const {currentCaretPosition, previousConformedValue, placeholderChar} = config;
+    let { rawValue } = config;
 
     let value = conformedValue;
 
     value = removeAllAtSymbolsButFirst(value);
 
     const indexOfAtDot = value.indexOf(atDot);
+
+    if (rawValue === undefined) {
+        rawValue = '';
+    }
 
     const emptyEmail = rawValue.match(new RegExp(`[^@\\s.${placeholderChar}]`)) === null;
 

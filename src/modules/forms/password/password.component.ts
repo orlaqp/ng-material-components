@@ -6,27 +6,27 @@ import { CustomValidators } from '../validators/custom-validators';
 import { ValidationInfo } from  '../../../models/validation-info';
 
 @Component({
-    selector: 'password',
+    selector: 'bw-password',
     template: inputBaseTemplate,
 })
 export class PasswordComponent extends InputBase implements OnInit {
 
-    @Input() fg: FormGroup;
-    @Input() placeholder: string;
-    @Input() field: string;
-    @Input() label: string;
-    @Input() floatingLabel: boolean;
-    @Input() leftIcon: string;
-    @Input() rightIcon: string;
-    @Input() disabled: boolean;
-    @Input() value: string;
-    @Input() alt: boolean;
+    @Input() public fg: FormGroup;
+    @Input() public placeholder: string;
+    @Input() public field: string;
+    @Input() public label: string;
+    @Input() public floatingLabel: boolean;
+    @Input() public leftIcon: string;
+    @Input() public rightIcon: string;
+    @Input() public disabled: boolean;
+    @Input() public value: string;
+    @Input() public alt: boolean;
 
     // validators
-    @Input() required: boolean;
-    @Input() min: number;
-    @Input() max: number;
-    @Input() enforceComplexity: boolean;
+    @Input() public required: boolean;
+    @Input() public min: number;
+    @Input() public max: number;
+    @Input() public enforceComplexity: boolean;
 
     public validations: ValidationInfo[];
 

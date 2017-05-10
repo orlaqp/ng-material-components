@@ -4,33 +4,35 @@ import { FormGroup } from '@angular/forms';
 import { InputBase } from '../input-base/input-base.component';
 
 @Component({
-    selector: 'phone',
-    template: inputBaseTemplate,
+    selector: 'bw-phone',
     styles: ['.form-control { text-align: right; } '],
+    template: inputBaseTemplate,
 })
 export class PhoneComponent extends InputBase implements OnInit {
 
-    @Input() fg: FormGroup;
-    @Input() placeholder: string;
-    @Input() field: string;
-    @Input() label: string;
-    @Input() floatingLabel: boolean;
-    @Input() leftIcon: string;
-    @Input() rightIcon: string;
-    @Input() disabled: boolean;
-    @Input() value: number;
-    @Input() fax: boolean;
-    @Input() alt: boolean;
+    @Input() public fg: FormGroup;
+    @Input() public placeholder: string;
+    @Input() public field: string;
+    @Input() public label: string;
+    @Input() public floatingLabel: boolean;
+    @Input() public leftIcon: string;
+    @Input() public rightIcon: string;
+    @Input() public disabled: boolean;
+    @Input() public value: number;
+    @Input() public fax: boolean;
+    @Input() public alt: boolean;
 
     // validators
-    @Input() required: boolean;
+    @Input() public required: boolean;
 
     constructor(el: ElementRef) {
         super(el);
         this.inputType = 'tel';
     }
 
-    public addValidators(): void { }
+    public addValidators(): void {
+        // nothing here
+    }
 
     public ngOnInit(): void {
         this.onInit();
@@ -39,9 +41,4 @@ export class PhoneComponent extends InputBase implements OnInit {
             this.leftIcon = this.fax ? 'account-box-phone' : 'phone';
         }
     }
-
-    public ngOnDestroy(): void {
-
-    }
-
 }

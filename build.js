@@ -58,8 +58,6 @@ cp(`-R`, `src/styles/img`, `${BUNDLES_DIR}`);
 cp(`-R`, `src/styles/fonts`, `${BUNDLES_DIR}`);
 echo(chalk.green(`Style compilation completed`));
 
-
-
 echo(chalk.green(`Bundling completed`));
 
 rm(`-Rf`, `${NPM_DIR}/*.js`);

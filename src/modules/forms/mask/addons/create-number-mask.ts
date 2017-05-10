@@ -3,10 +3,10 @@ const emptyString = '';
 const comma = ',';
 const period = '.';
 const nonDigitsRegExp = /\D+/g;
-const number = 'number';
+const num = 'number';
 const digitRegExp: RegExp = /\d/;
 
-export interface NumberMaskConfig {
+export interface INumberMaskConfig {
     prefix?: string;
     suffix?: string;
     includeThousandsSeparator?: boolean;
@@ -15,7 +15,7 @@ export interface NumberMaskConfig {
     decimalSymbol?: string;
     decimalLimit?: number;
     requireDecimal?: boolean;
-};
+}
 
 export default function createNumberMask({
     prefix = dollarSign,
@@ -26,7 +26,7 @@ export default function createNumberMask({
     decimalSymbol = period,
     decimalLimit = 2,
     requireDecimal = false,
-}: NumberMaskConfig = {}): (rawValue: any) => string[] {
+}: INumberMaskConfig = {}): (rawValue: any) => string[] {
 
     function numberMask(rawValue: any): string[] {
         const rawValueLength = rawValue.length;
@@ -42,14 +42,14 @@ export default function createNumberMask({
         const hasDecimal = indexOfLastDecimal !== -1;
 
         let integer: string;
-        let fraction: (RegExp | string)[];
+        let fraction: Array<RegExp | string> = [];
         let mask: any;
 
         if (hasDecimal && (allowDecimal || requireDecimal)) {
             integer = rawValue.slice(0, indexOfLastDecimal);
 
             fraction = rawValue.slice(indexOfLastDecimal + 1, rawValueLength);
-            fraction = convertToMask((<any>fraction).replace(nonDigitsRegExp, emptyString));
+            fraction = convertToMask((fraction as any).replace(nonDigitsRegExp, emptyString));
         } else {
             integer = rawValue;
         }
@@ -68,7 +68,7 @@ export default function createNumberMask({
             mask.push(decimalSymbol, '[]');
 
             if (fraction) {
-                if (typeof decimalLimit === number) {
+                if (typeof decimalLimit === num) {
                     fraction = fraction.slice(0, decimalLimit);
                 }
 
@@ -91,7 +91,7 @@ export default function createNumberMask({
         return mask;
     }
 
-    (<any>numberMask).instanceOf = 'createNumberMask';
+    (numberMask as any).instanceOf = 'createNumberMask';
 
     return numberMask;
 }

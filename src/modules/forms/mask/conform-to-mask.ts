@@ -3,25 +3,27 @@ import {placeholderChar as defaultPlaceholderChar} from './constants';
 
 const emptyString = '';
 
-export interface MaskConfig {
+export interface IMaskConfig {
     guide?: boolean;
     previousConformedValue?: string;
     placeholderChar?: string;
     placeholder?: string;
     currentCaretPosition?: number;
     keepCharPositions?: boolean;
-};
+}
 
-export default function conformToMask(rawValue = emptyString, mask = emptyString, config: MaskConfig = {}) {
+/* tslint:disable */
+
+export default function conformToMask(rawValue = emptyString, mask = emptyString, config: IMaskConfig = {}) {
   // These configurations tell us how to conform the mask
   const {
     guide = true,
     previousConformedValue = emptyString,
     placeholderChar = defaultPlaceholderChar,
     placeholder = convertMaskToPlaceholder(mask, defaultPlaceholderChar),
-    currentCaretPosition,
+    currentCaretPosition = 0,
     keepCharPositions,
-}: MaskConfig = config;
+}: IMaskConfig = config;
 
   // The configs below indicate that the user wants the algorithm to work in *no guide* mode
   const suppressGuide = guide === false && previousConformedValue !== undefined;
@@ -113,7 +115,7 @@ export default function conformToMask(rawValue = emptyString, mask = emptyString
         // or we find at least one character that we can map.
         while (rawValueArr.length > 0) {
           // Let's retrieve the first user character in the queue of characters we have left
-          const {char: rawValueChar, isNew} = rawValueArr.shift();
+          const {char: rawValueChar, isNew} = (<any>rawValueArr).shift();
 
           // If the character we got from the user input is a placeholder character (which happens
           // regularly because user input could be something like (540) 90_-____, which includes
@@ -148,7 +150,7 @@ export default function conformToMask(rawValue = emptyString, mask = emptyString
               // `9`, to the first available placeholder position, but then, there are no more spots available for the
               // `4` and `2`. So, we discard them and end up with a conformed value of `92__`.
               const rawValueArrLength = rawValueArr.length;
-              let indexOfNextAvailablePlaceholderChar: number = null;
+              let indexOfNextAvailablePlaceholderChar: number = 0;
 
               // Let's loop through the remaining raw value characters. We are looking for either a suitable spot, ie,
               // a placeholder character or a non-suitable spot, ie, a non-placeholder character that is not new.
@@ -215,7 +217,7 @@ export default function conformToMask(rawValue = emptyString, mask = emptyString
   // That's why the logic below finds the last filled placeholder character, and removes everything
   // from that point on.
   if (suppressGuide && isAddition === false) {
-    let indexOfLastFilledPlaceholderChar: number = null;
+    let indexOfLastFilledPlaceholderChar: number = 0;
 
     // Find the last filled placeholder position and substring from there
     for (let i = 0; i < conformedValue.length; i++) {

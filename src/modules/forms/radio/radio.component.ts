@@ -7,43 +7,44 @@ import { RadioGroupService } from './radio-group.service';
  *
  */
 @Component({
-    selector: 'radio',
+    selector: 'bw-radio',
     template: `
         <div class="radio m-b-15" [class.disabled]="disabled">
             <label>
-                <input type="radio" [name]="groupName" [disabled]="disabled" [attr.value]="value" (click)="check()"/><i class="input-helper"></i>{{label}}
+                <input type="radio" [name]="groupName" [disabled]="disabled"
+                    [attr.value]="value" (click)="check()"/><i class="input-helper"></i>{{label}}
             </label>
         </div>
     `,
 })
 export class RadioComponent implements AfterViewInit {
 
-    @Input() fg: FormGroup;
-    @Input() field: string;
-    @Input() label: string;
-    @Input() disabled: boolean;
-    @Input() nane: string;
-    @Input() value: string;
+    @Input() public fg: FormGroup;
+    @Input() public field: string;
+    @Input() public label: string;
+    @Input() public disabled: boolean;
+    @Input() public nane: string;
+    @Input() public value: string;
 
-    get groupName() : string {
-        return this._service.fieldName.replace('.', '_');
+    get groupName(): string {
+        return this.service.fieldName.replace('.', '_');
     }
 
     constructor(
         private el: ElementRef,
         // @Host() @Inject(forwardRef(() => RadioGroupComponent)) private radioGroup: RadioGroupComponent
-        private _service: RadioGroupService
+        private service: RadioGroupService
     ) { }
 
     public ngAfterViewInit() {
-        let ele: any = this.el.nativeElement.getElementsByTagName('input')[0];
+        const ele: any = this.el.nativeElement.getElementsByTagName('input')[0];
 
-        this._service.optionSelected$.subscribe((value) => {
+        this.service.optionSelected$.subscribe((value) => {
             ele.checked = value === this.value;
         });
 
-        if (this._service.defaultValue === this.value) {
-            window.setTimeout(() => { this._service.announceSelectedOption(this.value); }, 0);
+        if (this.service.defaultValue === this.value) {
+            window.setTimeout(() => { this.service.announceSelectedOption(this.value); }, 0);
         }
     }
 
@@ -52,7 +53,7 @@ export class RadioComponent implements AfterViewInit {
     }
 
     private _updateValue(): void {
-        this._service.announceSelectedOption(this.value);
+        this.service.announceSelectedOption(this.value);
     }
 
 }

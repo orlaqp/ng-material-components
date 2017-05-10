@@ -2,7 +2,8 @@ import { Directive, ElementRef, Input } from '@angular/core';
 import { FormControl, ControlValueAccessor } from '@angular/forms';
 import createTextMaskInputElement from './create-text-mask-input-element';
 
-export interface TextMaskConfig {
+/* tslint:disable */
+export interface ITextMaskConfig {
     control: FormControl;
     mask: string;
     guide: boolean;
@@ -11,7 +12,7 @@ export interface TextMaskConfig {
     keepCharPositions: boolean;
     onReject: any;
     onAccept: any;
-};
+}
 
 @Directive({
     host: {
@@ -25,7 +26,7 @@ export interface TextMaskConfig {
 export class MaskedInputDirective implements ControlValueAccessor {
 
     @Input('textMask')
-    textMaskConfig: TextMaskConfig = {
+    textMaskConfig: ITextMaskConfig = {
         control: new FormControl(),
         mask: '',
         guide: true,

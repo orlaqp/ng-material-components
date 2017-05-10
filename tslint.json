@@ -6,19 +6,15 @@
     "rules": {
         "directive-selector": [
             true,
-            "attribute",
-            [
-                "dir-prefix1",
-                "dir-prefix2"
+            "attribute", [
+                "bw"
             ],
             "camelCase"
         ],
         "component-selector": [
             true,
-            "element",
-            [
-                "cmp-prefix1",
-                "cmp-prefix2"
+            "element", [
+                "bw"
             ],
             "kebab-case"
         ],

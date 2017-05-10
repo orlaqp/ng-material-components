@@ -8,17 +8,19 @@ import {
     // state,
     // animate,
     // transition,
-    // style 
+    // style
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from '../../../models/menu-item';
 
 @Component({
-    selector: 'side-menu-item',
+    selector: 'bw-side-menu-item',
     template: `
-        <li class="{{activeClass}}" [ngClass]="{ 'toggled': expanded, 'sub-menu': item.children }" (click)="onItemClicked($event)"><a href="" (click)="$event.preventDefault()" [class.fc-alt]="alt"><i class="zmdi zmdi-{{item.icon}}" *ngIf="item.icon"></i>{{item.title}}</a>
+        <li class="{{activeClass}}" [ngClass]="{ 'toggled': expanded, 'sub-menu': item.children }"
+            (click)="onItemClicked($event)"><a href="" (click)="$event.preventDefault()"
+            [class.fc-alt]="alt"><i class="zmdi zmdi-{{item.icon}}" *ngIf="item.icon"></i>{{item.title}}</a>
             <ul [class.hidden]="!expanded" *ngIf="item.children">
-                <side-menu-item [item]="child" *ngFor="let child of item.children"></side-menu-item>
+                <bw-side-menu-item [item]="child" *ngFor="let child of item.children"></bw-side-menu-item>
             </ul>
         </li>
     `,
@@ -31,30 +33,30 @@ import { MenuItem } from '../../../models/menu-item';
     // ],
 })
 export class SideMenuItemComponent implements OnInit {
-    @Input() alt: boolean;
-    @Input() item: MenuItem;
+    @Input() public alt: boolean;
+    @Input() public item: MenuItem;
 
     public expanded: boolean = false;
     public childrenDisplay: string;
     public activeClass: string;
 
-    private _activeItemSubscription: Subscription;
+    private activeItemSubscription: Subscription;
 
-    constructor(private _router: Router, private _menuService: MenuService) { }
+    constructor(private router: Router, private menuService: MenuService) { }
 
-    ngOnInit() {
-        let that = this;
-        this._activeItemSubscription = this._menuService.activeItem$.subscribe((item) => {
+    public ngOnInit() {
+        const that = this;
+        this.activeItemSubscription = this.menuService.activeItem$.subscribe((item) => {
             that.activeClass = item.id === that.item.id ?
-                 that._menuService.activeClass : '';
+                 that.menuService.activeClass : '';
         });
     }
 
-    onItemClicked(e: any): void {
+    public onItemClicked(e: any): void {
         e.preventDefault();
 
         if (!this.item.children) {
-            this._menuService.setActive(this.item);
+            this.menuService.setActive(this.item);
         }
 
         // when item contain childrens then forget about everything else
@@ -67,9 +69,9 @@ export class SideMenuItemComponent implements OnInit {
         }
 
         if (this.item.route) {
-            this._router.navigate([this.item.route]);
+            this.router.navigate([this.item.route]);
         } else if (this.item.url) {
-            this._router.navigateByUrl(this.item.url);
+            this.router.navigateByUrl(this.item.url);
         } else if (this.item.externalUrl) {
             window.open(this.item.externalUrl);
         }

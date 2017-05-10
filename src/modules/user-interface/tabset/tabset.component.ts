@@ -3,16 +3,18 @@ import {TabDirective} from './tab.directive';
 // todo: add active event to tab
 // todo: fix? mixing static and dynamic tabs position tabs in order of creation
 @Component({
-  selector: 'tabset',
+  selector: 'bw-tab-set',
   template: `
-    <ul class="tab-nav tn-justified {{class}}" role="tablist" (click)="$event.preventDefault()" [ngClass]="classMap" [class.ts-alt]="alt">
-      <li 
-        class="nav-item" 
+    <ul class="tab-nav tn-justified {{class}}" role="tablist" (click)="$event.preventDefault()"
+      [ngClass]="classMap" [class.ts-alt]="alt">
+      <li
+        class="nav-item"
         *ngFor="let tabz of tabs"
         [class.active]="tabz.active"
         [class.disabled]="tabz.disabled"
         role="presentation">
-          <a class="nav-link" href="" [class.active]="tabz.active" [class.disabled]="tabz.disabled" (click)="tabClicked(tabz)">
+          <a class="nav-link" href="" [class.active]="tabz.active"
+            [class.disabled]="tabz.disabled" (click)="tabClicked(tabz)">
             <i class="zmdi zmdi-{{tabz.icon}}" *ngIf="tabz.icon" [ngClass]="{ 'icon-tab': iconTab }"></i>
             <span [ngTransclude]="tabz.headingRef">{{tabz.heading}}</span>
             <span *ngIf="tabz.removable">
@@ -26,12 +28,14 @@ import {TabDirective} from './tab.directive';
     </div>
   `,
 })
-export class TabsetComponent implements OnInit, OnDestroy {
+export class TabsetComponent implements OnDestroy {
 
-  @Input() class: string;
+  public classMap: any = {};
+
+  @Input() public class: string;
   @Input()
   public get iconTab(): boolean { return this._iconTab; }
-  @Input() alt = false;
+  @Input() public alt = false;
 
   @HostBinding('class.tab-container') protected clazz: boolean = true;
 
@@ -44,11 +48,6 @@ export class TabsetComponent implements OnInit, OnDestroy {
 
   private isDestroyed: boolean;
   private _iconTab: boolean;
-  private classMap: any = {};
-
-  public ngOnInit(): void {
-
-  }
 
   public ngOnDestroy(): void {
     this.isDestroyed = true;

@@ -4,37 +4,37 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angu
 import { MenuItem } from '../../../models/menu-item';
 
 @Component({
-    selector: 'side-menu',
+    providers: [ MenuService ],
+    selector: 'bw-side-menu',
     template: `
         <ul class="main-menu {{class}}">
-            <side-menu-item *ngFor="let item of items" [item]="item" [alt]="alt"></side-menu-item>
+            <bw-side-menu-item *ngFor="let item of items" [item]="item" [alt]="alt"></bw-side-menu-item>
         </ul>
     `,
-    providers: [ MenuService ],
 })
 export class SideMenuComponent implements OnInit, OnDestroy {
-    @Input() class: string;
-    @Input() alt = false;
-    @Input() items: MenuItem[];
-    @Input() activeClass: string = 'active';
-    @Input() activeIcon: string = '';
+    @Input() public class: string;
+    @Input() public alt = false;
+    @Input() public items: MenuItem[];
+    @Input() public activeClass: string = 'active';
+    @Input() public activeIcon: string = '';
 
-    @Output() itemClicked = new EventEmitter<MenuItem>();
+    @Output() private itemClicked = new EventEmitter<MenuItem>();
 
-    private _activeItemSubscription: Subscription;
+    private activeItemSubscription: Subscription;
 
-    constructor(private _service: MenuService) { }
+    constructor(private service: MenuService) { }
 
-    ngOnInit() {
-        let that = this;
-        this._activeItemSubscription = this._service.activeItem$.subscribe((item) => {
+    public ngOnInit() {
+        const that = this;
+        this.activeItemSubscription = this.service.activeItem$.subscribe((item) => {
             that.itemClicked.emit(item.id);
         });
 
-        this._service.initialize(this.items, this.activeClass, this.activeIcon);
+        this.service.initialize(this.items, this.activeClass, this.activeIcon);
     }
 
-    ngOnDestroy() {
-        this._activeItemSubscription.unsubscribe();
+    public ngOnDestroy() {
+        this.activeItemSubscription.unsubscribe();
     }
 }

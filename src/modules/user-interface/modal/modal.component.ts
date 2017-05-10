@@ -2,7 +2,7 @@ import { Component, OnDestroy, Input, Output, EventEmitter, ElementRef, HostBind
 import { ModalInstance, ModalResult } from './modal-instance.model';
 
 @Component({
-    selector: 'modal',
+    selector: 'bw-modal',
     host: {
         'class': 'modal',
         'role': 'dialog',
@@ -17,19 +17,20 @@ import { ModalInstance, ModalResult } from './modal-instance.model';
     `,
 })
 export class ModalComponent implements OnDestroy {
-    instance: ModalInstance;
-    visible: boolean = false;
 
-    @Input() class: string;
-    @Input() animation: boolean = true;
-    @Input() backdrop: string | boolean = true;
-    @Input() keyboard: boolean = true;
-    @Input() size: string;
-    @Input() cssClass: string = '';
+    @Input() public  class: string;
+    @Input() public  animation: boolean = true;
+    @Input() public  backdrop: string | boolean = true;
+    @Input() public  keyboard: boolean = true;
+    @Input() public  size: string;
+    @Input() public  cssClass: string = '';
 
-    @Output() onClose: EventEmitter<any> = new EventEmitter(false);
-    @Output() onDismiss: EventEmitter<any> = new EventEmitter(false);
-    @Output() onOpen: EventEmitter<any> = new EventEmitter(false);
+    @Output() public onClose: EventEmitter<any> = new EventEmitter(false);
+    @Output() public onDismiss: EventEmitter<any> = new EventEmitter(false);
+    @Output() public onOpen: EventEmitter<any> = new EventEmitter(false);
+
+    private instance: ModalInstance;
+    private visible: boolean = false;
 
     @HostBinding('class.fade') get fadeClass(): boolean {
         return this.animation;
@@ -60,33 +61,33 @@ export class ModalComponent implements OnDestroy {
         });
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy() {
         return this.instance && this.instance.destroy();
     }
 
-    routerCanDeactivate(): any {
+    public routerCanDeactivate(): any {
         return this.ngOnDestroy();
     }
 
-    open(size?: string): Promise<void> {
-        if (ModalSize.validSize(size)) this.overrideSize = size;
+    public open(size?: string): Promise<void> {
+        if (ModalSize.validSize(size)) { this.overrideSize = size; }
         return this.instance.open().then(() => {
             this.visible = this.instance.visible;
         });
     }
 
-    close(value?: any): Promise<void> {
+    public close(value?: any): Promise<void> {
         return this.instance.close().then(() => {
             this.onClose.emit(value);
         });
     }
 
-    dismiss(): Promise<void> {
+    public dismiss(): Promise<void> {
         return this.instance.dismiss();
     }
 
-    getCssClasses(): string {
-        let classes: string[] = [];
+    public getCssClasses(): string {
+        const classes: string[] = [];
 
         if (this.isSmall()) {
             classes.push('modal-sm');

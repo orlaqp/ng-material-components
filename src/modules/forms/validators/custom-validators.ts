@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { ControlWithType } from '../../../models/control-with-type';
 
 export interface ValidationResult {
@@ -33,7 +34,7 @@ export class CustomValidators {
 
     static emailAddress(control: ControlWithType): ValidationResult {
         if (control.value.trim() === '') {
-            return null;
+            return { };
         }
 
         let EMAIL_REGEXP: RegExp = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
@@ -42,12 +43,12 @@ export class CustomValidators {
             return { invalidEmail: true };
         }
 
-        return null;
+        return { };
     }
 
     static complexPassword(control: ControlWithType): ValidationResult {
         if (control.value.trim() === '') {
-            return null;
+            return { };
         }
 
         let regExp: RegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/;
@@ -57,7 +58,7 @@ export class CustomValidators {
             return { weakPassword: true };
         }
 
-        return null;
+        return { };
     }
 
     static minNumber(min: number): Function {
@@ -67,14 +68,14 @@ export class CustomValidators {
             let value: number = processNumber(control);
 
             if (isNaN(value)) {
-                return null;
+                return { };
             }
 
             if (value < min) {
                 return { tooLow: true };
             }
 
-            return null;
+            return { };
         };
 
     }
@@ -85,14 +86,14 @@ export class CustomValidators {
             let value: number = processNumber(control);
 
             if (isNaN(value)) {
-                return null;
+                return { };
             }
 
             if (value > max) {
                 return { tooHigh: true };
             }
 
-            return null;
+            return { };
         };
 
     }

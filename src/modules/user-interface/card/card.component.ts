@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'card',
+    selector: 'bw-card',
     template: `
         <div class="card {{depthClass}} {{topDepthClass}} {{class}}">
             <ng-content></ng-content>
@@ -9,9 +9,9 @@ import { Component, Input } from '@angular/core';
     `,
 })
 export class CardComponent {
-    @Input() depth: number;
-    @Input() topDepth: number;
-    @Input() class: string;
+    @Input() public depth: number;
+    @Input() public topDepth: number;
+    @Input() public class: string;
 
     get depthClass(): string {
         return this.depth ? `z-depth-${this.depth}` : '';

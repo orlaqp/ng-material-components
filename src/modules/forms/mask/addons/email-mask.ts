@@ -1,5 +1,5 @@
 import emailPipe from './email-pipe';
-import { EmailPipeConfig } from './email-pipe';
+import { IEmailPipeConfig } from './email-pipe';
 
 const asterisk = '*';
 const dot = '.';
@@ -12,7 +12,7 @@ const anyNonWhitespaceRegExp = /[^\s]/;
 const anyNonDotOrWhitespaceRegExp = /[^.\s]/;
 const allWhitespaceRegExp = /\s/g;
 
-function emailMask(rawValue: string, config: EmailPipeConfig) {
+function emailMask(rawValue: string, config: IEmailPipeConfig) {
     rawValue = rawValue.replace(allWhitespaceRegExp, emptyString);
 
     const {placeholderChar, currentCaretPosition} = config;
@@ -20,8 +20,8 @@ function emailMask(rawValue: string, config: EmailPipeConfig) {
     const indexOfLastDot = rawValue.lastIndexOf(dot);
     const indexOfTopLevelDomainDot = (indexOfLastDot < indexOfFirstAtSymbol) ? -1 : indexOfLastDot;
 
-    let localPartToDomainConnector = getConnector(rawValue, indexOfFirstAtSymbol + 1, atSymbol);
-    let domainNameToTopLevelDomainConnector = getConnector(rawValue, indexOfTopLevelDomainDot - 1, dot);
+    const localPartToDomainConnector = getConnector(rawValue, indexOfFirstAtSymbol + 1, atSymbol);
+    const domainNameToTopLevelDomainConnector = getConnector(rawValue, indexOfTopLevelDomainDot - 1, dot);
 
     let localPart = getLocalPart(rawValue, indexOfFirstAtSymbol);
     let domainName = getDomainName(rawValue, indexOfFirstAtSymbol, indexOfTopLevelDomainDot, placeholderChar);

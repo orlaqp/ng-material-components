@@ -1,3 +1,4 @@
+/* tslint:disable */
 export interface CustomCSS extends CSSStyleDeclaration {
     resize: string;
 }
@@ -33,12 +34,12 @@ try {
 function assign(ta: any, options: any) {
     if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || set.has(ta)) return;
 
-    let heightOffset: number = null;
+    let heightOffset: number | null = null;
     let clientWidth: number = ta.clientWidth;
-    let cachedHeight: number = null;
+    let cachedHeight: number | null  = null;
 
     function init() {
-        const style: CustomCSS = <CustomCSS>window.getComputedStyle(ta, null);
+        const style: CustomCSS = <CustomCSS>window.getComputedStyle(ta, undefined);
 
         if (style.resize === 'vertical') {
             ta.style.resize = 'none';
@@ -47,9 +48,9 @@ function assign(ta: any, options: any) {
         }
 
         if (style.boxSizing === 'content-box') {
-            heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+            heightOffset = -(parseFloat(style.paddingTop || '') + parseFloat(style.paddingBottom || ''));
         } else {
-            heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+            heightOffset = parseFloat(style.borderTopWidth || '') + parseFloat(style.borderBottomWidth || '');
         }
         // Fix when a textarea is not on document body and heightOffset is Not a Number
         if (isNaN(heightOffset)) {
@@ -97,11 +98,12 @@ function assign(ta: any, options: any) {
     function resize() {
         const originalHeight = ta.style.height;
         const overflows = getParentOverflows(ta);
-        const docTop = document.documentElement && document.documentElement.scrollTop; // Needed for Mobile IE (ticket #240)
+        // Needed for Mobile IE (ticket #240)
+        const docTop = document.documentElement && document.documentElement.scrollTop;
 
         ta.style.height = 'auto';
 
-        let endHeight = ta.scrollHeight + heightOffset;
+        const endHeight = ta.scrollHeight + heightOffset;
 
         if (ta.scrollHeight === 0) {
             // If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
@@ -127,8 +129,8 @@ function assign(ta: any, options: any) {
     function update() {
         resize();
 
-        const computed = window.getComputedStyle(ta, null);
-        const computedHeight = Math.round(parseFloat(computed.height));
+        const computed = window.getComputedStyle(ta, undefined);
+        const computedHeight = Math.round(parseFloat(computed.height || ''));
         const styleHeight = Math.round(parseFloat(ta.style.height));
 
         // The computed height not matching the height set via resize indicates that
@@ -165,16 +167,16 @@ function assign(ta: any, options: any) {
         ta.removeEventListener('autosize:update', update, false);
         set.delete(ta);
 
-        Object.keys(style).forEach(key => {
+        Object.keys(style).forEach((key) => {
             ta.style[key] = style[key];
         });
     };
 
     destroy.bind(ta, {
         height: ta.style.height,
-        resize: ta.style.resize,
-        overflowY: ta.style.overflowY,
         overflowX: ta.style.overflowX,
+        overflowY: ta.style.overflowY,
+        resize: ta.style.resize,
         wordWrap: ta.style.wordWrap,
     });
 
@@ -198,13 +200,13 @@ function assign(ta: any, options: any) {
 }
 
 function destroy(ta: HTMLElement) {
-    if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) return;
+    if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) { return; }
     const evt = createEvent('autosize:destroy');
     ta.dispatchEvent(evt);
 }
 
 function update(ta: HTMLElement) {
-    if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) return;
+    if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) { return; }
     const evt = createEvent('autosize:update');
     ta.dispatchEvent(evt);
 }
@@ -219,7 +221,7 @@ if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'functio
 } else {
     autosize = (el: any, options: any) => {
         if (el) {
-            Array.prototype.forEach.call(el.length ? el : [el], (x: Object) => assign(x, options));
+            Array.prototype.forEach.call(el.length ? el : [el], (x: object) => assign(x, options));
         }
         return el;
     };

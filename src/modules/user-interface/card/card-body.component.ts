@@ -1,18 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'card-body',
+    selector: 'bw-card-body',
     template: `
         <div class="card-body" [class.card-padding]="padded">
             <ng-content></ng-content>
         </div>
     `,
 })
-export class CardBodyComponent implements OnInit {
+export class CardBodyComponent {
 
-    @Input() padded: boolean = false;
+    @Input() public padded: boolean = false;
 
-    constructor() { }
-
-    ngOnInit() { }
 }

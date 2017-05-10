@@ -4,24 +4,25 @@ import { InputBase } from '../input-base/input-base.component';
 import { guid } from '../../../utils/utilities';
 
 @Component({
-    selector: 'toggle',
+    selector: 'bw-toggle',
     template: `
         <div class="toggle-switch" [class.disabled]="disabled" [attr.data-ts-color]="color">
             <label class="ts-label" [attr.for]="identifier">{{label}}</label>
-            <input [attr.id]="identifier" type="checkbox" hidden="hidden" [disabled]="disabled" [formControl]="control" />
+            <input [attr.id]="identifier" type="checkbox" hidden="hidden"
+                [disabled]="disabled" [formControl]="control" />
             <label class="ts-helper" [attr.for]="identifier"></label>
         </div>
     `,
 })
 export class ToggleComponent extends InputBase implements OnInit {
 
-    @Input() fg: FormGroup;
-    @Input() placeholder: string;
-    @Input() field: string;
-    @Input() label: string;
-    @Input() value: string;
-    @Input() disabled: boolean;
-    @Input() color: string = '';
+    @Input() public fg: FormGroup;
+    @Input() public placeholder: string;
+    @Input() public field: string;
+    @Input() public label: string;
+    @Input() public value: string;
+    @Input() public disabled: boolean;
+    @Input() public color: string = '';
 
     public identifier: string;
 
@@ -29,16 +30,14 @@ export class ToggleComponent extends InputBase implements OnInit {
         super(el);
     }
 
-    public addValidators(): void { }
+    public addValidators(): void {
+        // validators
+    }
 
     public ngOnInit(): void {
         this.onInit();
 
         this.identifier = guid();
-    }
-
-    public ngOnDestroy(): void {
-
     }
 
 }

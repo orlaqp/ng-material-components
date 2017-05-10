@@ -1,5 +1,7 @@
 // from: https://github.com/ng2-ui/ng2-datetime-picker
 
+
+/* tslint:disable */
 export interface HTMLInputElement {
     [key: string]: Date;
 }
@@ -23,18 +25,20 @@ import { DateTimePickerPopupComponent } from './datetime-picker-popup.component'
 import { DateTime } from './datetime';
 import { InputBase } from '../input-base/input-base.component';
 import { iOS } from '../../../utils/utilities';
+import * as moment from 'moment/moment';
 
 /**
  * If the given string is not a valid date, it defaults back to today
  */
 @Component({
-    selector: 'date-time-picker',
+    selector: 'bw-date-time-picker',
     template: `
-        <div class="input-group form-group" [class.fc-alt]="alt"><span class="input-group-addon"><i class="zmdi zmdi-calendar"></i></span>
+        <div class="input-group form-group" [class.fc-alt]="alt"><span class="input-group-addon">
+            <i class="zmdi zmdi-calendar"></i></span>
             <div class="dtp-container fg-line" [class.disabled]="disabled" [class.fg-toggled]="toggled">
                 <input 
                     class="form-control date-time-picker" 
-                    #i="#i" 
+                    #i
                     [type]="inputType" 
                     placeholder="{{placeholder}}" 
                     [formControl]="control" 
@@ -67,12 +71,12 @@ export class DateTimePickerComponent extends InputBase implements OnInit, OnChan
 
     private el: any;                               /* input element */
     private datetimePickerEl: HTMLElement;                      /* dropdown element */
-    private componentRef: ComponentRef<DateTimePickerPopupComponent>; /* dropdown component reference */
+    private componentRef: ComponentRef<DateTimePickerPopupComponent> | undefined; /* dropdown component reference */
     private ctrl: AbstractControl;
     private sub: any;
 
     constructor(
-        private ele: ElementRef,
+        public ele: ElementRef,
         private resolver: ComponentFactoryResolver,
         private viewContainerRef: ViewContainerRef,
         @Optional() @Host() @SkipSelf() private parent: ControlContainer
@@ -168,7 +172,7 @@ export class DateTimePickerComponent extends InputBase implements OnInit, OnChan
         }
 
         // this.el.value = this.getFormattedDateStr();
-        let formattedDate = this.getFormattedDateStr();
+        let formattedDate = this.getFormattedDateStr() || '';
 
         if (!moment(this.control.value).isSame(formattedDate))
             this.control.setValue(this.getFormattedDateStr());
@@ -230,8 +234,8 @@ export class DateTimePickerComponent extends InputBase implements OnInit, OnChan
         }
     };
 
-    private elementIn(el: Node, containerEl: Node): boolean {
-        while (el = el.parentNode) {
+    private elementIn(el: Node | null, containerEl: Node): boolean {
+        while (el = (<any>el).parentNode) {
             if (el === containerEl) return true;
         }
         return false;
@@ -266,7 +270,7 @@ export class DateTimePickerComponent extends InputBase implements OnInit, OnChan
     /**
      *  returns toString function of date object
      */
-    private getFormattedDateStr(): string {
+    private getFormattedDateStr(): string | null {
 
         if (this.el['dateValue']) {
             if (this.dateFormat) {

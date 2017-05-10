@@ -8,7 +8,7 @@ const strFunction = 'function';
 const emptyString = '';
 const strNone = 'none';
 
-export interface MaskInputConfig {
+export interface IMaskInputConfig {
     inputElement: HTMLInputElement;
     mask: any;
     guide: any;
@@ -17,7 +17,7 @@ export interface MaskInputConfig {
     onAccept: any;
     onReject: any;
     keepCharPositions: boolean;
-};
+}
 
 export default function createTextMaskInputElement({
     inputElement,
@@ -28,7 +28,7 @@ export default function createTextMaskInputElement({
     onAccept,
     onReject,
     keepCharPositions = false,
-}: MaskInputConfig) {
+}: IMaskInputConfig) {
     // Text Mask accepts masks that are a combination of a `mask` and a `pipe` that work together. If such a `mask` is
     // passed, we destructure it below, so the rest of the code can work normally as if a separate `mask` and a `pipe`
     // were passed.
@@ -45,7 +45,7 @@ export default function createTextMaskInputElement({
 
     // The `placeholder` is an essential piece of how Text Mask works. For a mask like `(111)`, the placeholder would be
     // `(___)` if the `placeholderChar` is set to `_`.
-    let placeholder: string;
+    let placeholder: string = '';
 
     // We don't know what the mask would be yet. If it is an array, we take it as is, but if it's a function, we will
     // have to call that function to get the mask array.
@@ -70,10 +70,11 @@ export default function createTextMaskInputElement({
         // is for this to be read from the `inputElement` directly.
         update(rawValue = inputElement.value) {
             // If `rawValue` equals `state.previousConformedValue`, we don't need to change anything. So, we return.
-            // This check is here to handle controlled framework components that repeat the `update` call on every render.
+            // This check is here to handle controlled framework components that
+            // repeat the `update` call on every render.
             if (rawValue === state.previousConformedValue) {
                 return;
-            };
+            }
 
             // We check the provided `rawValue` before moving further.
             // If it's something we can't work with `getSafeRawValue` will throw.
@@ -92,13 +93,16 @@ export default function createTextMaskInputElement({
             if (typeof providedMask === strFunction) {
                 mask = providedMask(safeRawValue, { currentCaretPosition, previousConformedValue, placeholderChar });
 
-                // mask functions can setup caret traps to have some control over how the caret moves. We need to process
-                // the mask for any caret traps. `processCaretTraps` will remove the caret traps from the mask and return
+                // mask functions can setup caret traps to have some control over how the caret moves.
+                // We need to process
+                // the mask for any caret traps. `processCaretTraps` will remove the caret traps
+                // from the mask and return
                 // the indexes of the caret traps.
                 const {maskWithoutCaretTraps, indexes} = processCaretTraps(mask);
 
                 mask = maskWithoutCaretTraps; // The processed mask is what we're interested in
-                caretTrapIndexes = indexes; // And we need to store these indexes because they're needed by `adjustCaretPosition`
+                caretTrapIndexes = indexes; // And we need to store these indexes because
+                                            // they're needed by `adjustCaretPosition`
 
                 placeholder = convertMaskToPlaceholder(mask, placeholderChar);
 
@@ -119,7 +123,8 @@ export default function createTextMaskInputElement({
             };
 
             // `conformToMask` returns the information below: we need the `conformedValue` and we need to know whether
-            // some characters were rejected. We'll use `someCharsRejected` to know whether we should call the `onReject`
+            // some characters were rejected. We'll use `someCharsRejected`
+            // to know whether we should call the `onReject`
             // callback
             const {conformedValue, meta: {someCharsRejected}} = conformToMask(safeRawValue, mask, conformToMaskConfig);
 
@@ -134,12 +139,14 @@ export default function createTextMaskInputElement({
                 // pipeResults = pipe(conformedValue, { rawValue: safeRawValue, ...conformToMaskConfig });
                 pipeResults = pipe(conformedValue, { rawValue: safeRawValue });
 
-                // `pipeResults` should be an object. But as a convenience, we allow the pipe author to just return `false` to
+                // `pipeResults` should be an object. But as a convenience,
+                // we allow the pipe author to just return `false` to
                 // indicate rejection. Or return just a string when there are no piped characters.
                 // If the `pipe` returns `false` or a string, the block below turns it into an object that the rest
                 // of the code can work with.
                 if (pipeResults === false) {
-                    // If the `pipe` rejects `conformedValue`, we use the `previousConformedValue`, and set `rejected` to `true`.
+                    // If the `pipe` rejects `conformedValue`, we use the `previousConformedValue`,
+                    // and set `rejected` to `true`.
                     pipeResults = { value: previousConformedValue, rejected: true };
                 } else if (isString(pipeResults)) {
                     pipeResults = { value: pipeResults };
@@ -148,37 +155,41 @@ export default function createTextMaskInputElement({
 
             // Before we proceed, we need to know which conformed value to use, the one returned by the pipe or the one
             // returned by `conformToMask`.
-            const finalConformedValue: any = (piped) ? pipeResults.value : conformedValue,
+            const finalConformedValue: any = (piped) ? pipeResults.value : conformedValue;
 
-                // After setting the `finalConformedValue` as the value of the `inputElement`, we will need to know where to set
-                // the caret position. `adjustCaretPosition` will tell us.
-                adjustedCaretPosition = adjustCaretPosition({
-                    previousConformedValue,
-                    conformedValue: finalConformedValue,
-                    placeholder,
-                    rawValue: safeRawValue,
-                    currentCaretPosition,
-                    placeholderChar,
-                    indexesOfPipedChars: pipeResults.indexesOfPipedChars,
-                    caretTrapIndexes,
-                }),
+            // After setting the `finalConformedValue` as the value of the `inputElement`,
+            // we will need to know where to set
+            // the caret position. `adjustCaretPosition` will tell us.
+            const adjustedCaretPosition = adjustCaretPosition({
+                previousConformedValue,
+                conformedValue: finalConformedValue,
+                indexesOfPipedChars: pipeResults.indexesOfPipedChars,
+                placeholder,
+                rawValue: safeRawValue,
+                currentCaretPosition,
+                placeholderChar,
+                caretTrapIndexes,
+            });
 
-                // Text Mask sets the input value to an empty string when the condition below is set. It provides a better UX.
-                inputValueShouldBeEmpty = finalConformedValue === placeholder && adjustedCaretPosition === 0,
+            // Text Mask sets the input value to an empty string when the
+            // condition below is set. It provides a better UX.
+            const inputValueShouldBeEmpty = finalConformedValue === placeholder && adjustedCaretPosition === 0;
 
-                inputElementValue = (inputValueShouldBeEmpty) ? emptyString : finalConformedValue;
+            const inputElementValue = (inputValueShouldBeEmpty) ? emptyString : finalConformedValue;
 
             inputElement.value = inputElementValue; // set the input value
             safeSetSelection(inputElement, adjustedCaretPosition); // adjust caret position
             state.previousConformedValue = inputElementValue; // store value for access for next time
 
-            // If we set a value to the input element that's different form `previousConformedValue`, it means user input
+            // If we set a value to the input element that's different form
+            // `previousConformedValue`, it means user input
             // was accepted, and we call the `onAccept` callback if it's a function.
             if (typeof onAccept === strFunction && inputElementValue !== previousConformedValue) {
                 onAccept();
             }
 
-            // Now we need to figure out if user input was rejected to decide whether to call `onReject` callback or not.
+            // Now we need to figure out if user input was rejected to decide
+            // whether to call `onReject` callback or not.
             // We need to know if the operation is deletion, because if it is, then we definitely don't need to call
             // `onReject` in that case.
             const isDeletion = safeRawValue.length < previousConformedValue.length;
@@ -198,17 +209,17 @@ export default function createTextMaskInputElement({
                 // so know whether the user input was rejected by the mask pattern or by the pipe.
                 onReject({
                     conformedValue: finalConformedValue,
-                    pipeRejection: pipeResults.rejected,
                     maskRejection: someCharsRejected,
+                    pipeRejection: pipeResults.rejected,
                 });
             }
         },
     };
 }
 
-function safeSetSelection(element: HTMLInputElement, selectionPosition: number) {
+function safeSetSelection(element: HTMLInputElement, selectionPosition: number | undefined) {
     if (document.activeElement === element) {
-        (<any>element).setSelectionRange(selectionPosition, selectionPosition, strNone);
+        (element as any).setSelectionRange(selectionPosition, selectionPosition, strNone);
     }
 }
 

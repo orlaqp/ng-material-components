@@ -3,15 +3,31 @@ import {
     FormGroup,
     Validators } from '@angular/forms';
 import { SubmitableFormGroup } from '../../../models/submitable-form-group';
-import { ControlWithType }  from '../../../models/control-with-type';
-import { TypeEnum }  from '../../../models/type-enum';
+import { ControlWithType } from '../../../models/control-with-type';
+import { TypeEnum } from '../../../models/type-enum';
 import { CustomValidators } from '../validators/custom-validators';
 import { ValidationInfo } from '../../../models/validation-info';
 
 export class InputBase {
 
+    public static minValidator(length: number): ValidationInfo {
+        return {
+            message: `At least ${length} characters are required`,
+            type: 'minlength',
+            validator: Validators.minLength(length),
+        };
+    }
+
+    public static maxValidator(length: number): ValidationInfo {
+        return {
+            message: `No more than ${length} characters are allowed`,
+            type: 'maxlength',
+            validator: Validators.maxLength(length),
+        };
+    }
+
     public dataType: TypeEnum;
-    public model: Object;
+    public model: object;
     public fg: FormGroup;
     public field: string;
     public floatingLabel: boolean;
@@ -26,28 +42,12 @@ export class InputBase {
     public toggled: boolean;
     public inputType: string = 'text'; // text, password, number, email, datetime, date
 
-    public _el: ElementRef;
+    public ele: ElementRef;
 
     public initialized = false;
 
-    static minValidator(length: number): ValidationInfo {
-        return {
-            validator: Validators.minLength(length),
-            type: 'minlength',
-            message: `At least ${length} characters are required`,
-        };
-    }
-
-    static maxValidator(length: number): ValidationInfo {
-        return {
-            validator: Validators.maxLength(length),
-            type: 'maxlength',
-            message: `No more than ${length} characters are allowed`,
-        };
-    }
-
     constructor(el: ElementRef) {
-        this._el = el;
+        this.ele = el;
         this.validations = [];
         // be default assign string type becasue it is the most common
         this.dataType = TypeEnum.String;
@@ -64,15 +64,15 @@ export class InputBase {
     }
 
     public addValidators(): void {
-        throw 'Validators should be defined at the derived class';
+        throw new Error('Validators should be defined at the derived class');
     }
 
     public addMinValidation(): void {
         if (this.min) {
             this.validations.push({
-                validator: CustomValidators.minNumber(this.min),
-                type: 'tooLow',
                 message: `Minimum aceptable value is ${this.min}`,
+                type: 'tooLow',
+                validator: CustomValidators.minNumber(this.min),
             });
         }
     }
@@ -80,9 +80,9 @@ export class InputBase {
     public addMaxValidation(): void {
         if (this.max) {
             this.validations.push({
-                validator: CustomValidators.maxNumber(this.max),
-                type: 'tooHigh',
                 message: `Maximum aceptable value is ${this.max}`,
+                type: 'tooHigh',
+                validator: CustomValidators.maxNumber(this.max),
             });
         }
     }
@@ -107,13 +107,13 @@ export class InputBase {
 
         if (this.required) {
             this.validations.push({
-                validator: Validators.required,
-                type: 'required',
                 message: 'This field is required',
+                type: 'required',
+                validator: Validators.required,
             });
         }
 
-        let validators: any = [];
+        const validators: any = [];
 
         // only add validators if neccessary
         if (this.validations.length > 0) {
@@ -124,11 +124,11 @@ export class InputBase {
     }
 
     private _processControl(field: string): void {
-        let that: InputBase = this;
-        let pathTokens: string[] = field.split('.');
+        const that: InputBase = this;
+        const pathTokens: string[] = field.split('.');
         // the latest element is the array indicates the control name so I should
         // not process it
-        let fieldName: string = pathTokens.pop();
+        const fieldName: string = pathTokens.pop() || '';
         let fg: FormGroup = that.fg;
 
         // create controls group tree
@@ -136,7 +136,7 @@ export class InputBase {
             if (!fg.controls[token]) {
                 fg.addControl(token, new SubmitableFormGroup({}));
             }
-            fg = <FormGroup>fg.controls[token];
+            fg = fg.controls[token] as FormGroup;
         });
 
         // make sure value is not null
@@ -144,7 +144,7 @@ export class InputBase {
             this.value = '';
         }
 
-        let validators: any = this._getValidators();
+        const validators: any = this._getValidators();
         this.control = new ControlWithType(
             this.dataType,
             this.value,

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-    selector: '[card-padding]',
+    selector: '[bwCardPadding]',
     host: { '[class.card-padding]': 'true' },
 })
 export class CardPaddingDirective { }

@@ -3,27 +3,27 @@ import { Component, Input, OnInit, ElementRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { InputBase } from '../input-base/input-base.component';
 import { CustomValidators } from '../validators/custom-validators';
-import { ValidationInfo } from  '../../../models/validation-info';
+import { ValidationInfo } from '../../../models/validation-info';
 
 @Component({
-    selector: 'email',
+    selector: 'bw-email',
     template: inputBaseTemplate,
 })
 export class EmailComponent extends InputBase implements OnInit {
 
-    @Input() fg: FormGroup;
-    @Input() placeholder: string;
-    @Input() field: string;
-    @Input() label: string;
-    @Input() floatingLabel: boolean;
-    @Input() leftIcon: string;
-    @Input() rightIcon: string;
-    @Input() disabled: boolean;
-    @Input() value: string;
-    @Input() alt: boolean;
+    @Input() public fg: FormGroup;
+    @Input() public placeholder: string;
+    @Input() public field: string;
+    @Input() public label: string;
+    @Input() public floatingLabel: boolean;
+    @Input() public leftIcon: string;
+    @Input() public rightIcon: string;
+    @Input() public disabled: boolean;
+    @Input() public value: string;
+    @Input() public alt: boolean;
 
     // validators
-    @Input() required: boolean;
+    @Input() public required: boolean;
 
     public validations: ValidationInfo[];
 
@@ -35,9 +35,9 @@ export class EmailComponent extends InputBase implements OnInit {
     public addValidators(): void {
         this.validations.push(
             {
-                validator: CustomValidators.emailAddress,
-                type: 'invalidEmail',
                 message: `Email address is invalid`,
+                type: 'invalidEmail',
+                validator: CustomValidators.emailAddress,
             }
         );
     }
@@ -50,9 +50,4 @@ export class EmailComponent extends InputBase implements OnInit {
             this.leftIcon = 'email';
         }
     }
-
-    public ngOnDestroy(): void {
-
-    }
-
 }

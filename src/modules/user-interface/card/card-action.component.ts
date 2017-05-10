@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-    selector: 'card-action',
+    selector: 'bw-card-action',
     template: `
         <button class="btn btn-float waves-effect bgm-{{color}}" (click)="onClicked($event)">
             <i class="zmdi zmdi-{{icon}}"></i>
@@ -10,12 +10,12 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class CardActionComponent {
 
-    @Input() color: string;
-    @Input() icon: string;
+    @Input() public color: string;
+    @Input() public icon: string;
 
-    @Output() actionClicked = new EventEmitter();
+    @Output() private actionClicked = new EventEmitter();
 
-    onClicked(event: MouseEvent): void {
+    public onClicked(event: MouseEvent): void {
         event.preventDefault();
 
         this.actionClicked.emit(undefined);
