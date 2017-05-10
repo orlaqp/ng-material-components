@@ -19,6 +19,37 @@ then, edit the style.css file from you angular app and import the css of the lib
 @import '../node_modules/ng-material-components/bundles/app.css';
 ```
 
+finally, you should add it to your module by doing something like this:
+
+```typescript
+import {
+  MaterialFormsModule,
+  MaterialUserInterfaceModule
+} from 'ng-material-components/modules/ng-material-components';
+
+...
+
+@NgModule({
+  imports: [
+      ...
+      MaterialFormsModule.forRoot(),
+      MaterialUserInterfaceModule.forRoot()
+      ...
+  ],
+  declarations: [
+      ...
+  ],
+  exports: [
+    ...
+  ],
+  providers: [
+      ...
+  ]
+})
+export class AppModule { }
+
+```
+
 And that should be it. 
 
 I am working on a new demo site that will allow you to easily copy and paste sample code to test all the library controls
