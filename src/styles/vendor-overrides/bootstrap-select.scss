@@ -1,26 +1,23 @@
 @import '../variables';
 @import '../mixins/images';
-
+@import './select-picker.component';
+// @import '../../../node_modules/bootstrap-select/dist/css/bootstrap-select.css';
 .bootstrap-select {
     .dropdown-menu {
         padding: 0;
     }
-
     .dropdown-toggle:focus {
         outline: none !important;
     }
-
-    & > .dropdown-toggle {
+    &>.dropdown-toggle {
         line-height: 1.9;
     }
-
-    & > .btn-default {
+    &>.btn-default {
         background: none !important;
         border-bottom: 1px solid #e0e0e0 !important;
         border-radius: 0;
         padding-left: 0;
         padding-right: 0;
-
         &:before {
             position: absolute;
             top: -4px;
@@ -35,7 +32,6 @@
             pointer-events: none;
             z-index: 5;
         }
-
         &:after {
             position: absolute;
             z-index: 3;
@@ -47,29 +43,24 @@
             @include transition(all);
             @include transition-duration(300ms);
         }
-
         &:not(.disabled):after,
         &:not(.readonly):after {
             background: $m-blue;
         }
-
         &.disabled:after,
         &.readonly:after {
             background: #ccc;
         }
     }
-
     &.open {
-        & > .btn-default:after {
+        &>.btn-default:after {
             width: 100%;
         }
     }
-
     .bs-searchbox {
         padding: 5px 5px 5px 40px;
         position: relative;
         background: $ace;
-
         &:before {
             position: absolute;
             left: 0;
@@ -81,19 +72,16 @@
             font-size: 25px;
             padding: 4px 0 0 15px;
         }
-
         input {
             border: 0;
             background: transparent;
         }
     }
-
     &.btn-group {
         .dropdown-menu li a.opt {
             padding-left: 17px;
         }
     }
-
     .check-mark {
         margin-top: -5px !important;
         font-size: 19px;
@@ -104,19 +92,16 @@
         position: absolute;
         top: 11px;
         right: 15px;
-
         &:before {
             content: "\f26b";
             font-family: $font-icon-md;
         }
     }
-
     .selected {
         .check-mark {
             @include scale(1);
         }
     }
-
     .notify {
         bottom: 0 !important;
         margin: 0 !important;
@@ -126,11 +111,9 @@
         color: #fff !important;
         text-align: center;
     }
-
     &:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
         width: 100%;
     }
-
     &.fc-alt {
         button {
             .filter-option {

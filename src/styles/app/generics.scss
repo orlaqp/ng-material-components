@@ -78,7 +78,7 @@
 
     @for $size from $from through $to {
 
-        .f-#{$size} {
+        .f-.#{$size} {
             font-size: #{$size}px !important;
         }
 
