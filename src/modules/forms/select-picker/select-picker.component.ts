@@ -94,13 +94,19 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
     }
 
     public ngOnInit(): void {
+        const that = this;
+
         this.onInit();
 
         this.query = new FormControl();
 
         this.query.valueChanges.subscribe(filter => {
-            this._filterResults(filter);
+            that._filterResults(filter);
         });
+
+        this.fg.controls[that.field].valueChanges.subscribe(data => {
+           that._selectItemOnValueChanged(data);
+        })
 
         this._updateValue();
     }
@@ -210,6 +216,19 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         }
 
         item.selected = !item.selected;
+    }
+
+    private _selectItemOnValueChanged(data: any) {
+        const that = this;
+       
+        if (!data || data === '') { return; }
+
+        const item = that.items.find(i => i.id === data);
+        if (item) {
+            const filteredItem = that.filteredItems.find(i => i.id === item.id);
+            if (filteredItem) { filteredItem.selected = true; }
+            that.selection = String(item.title);
+        }
     }
 
 }
