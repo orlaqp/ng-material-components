@@ -221,12 +221,12 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
     private _selectItemOnValueChanged(data: any) {
         const that = this;
        
-        if (!data || data === '') { return; }
+        if (!data || data === '' ||
+            !this.filteredItems || this.filteredItems.length < 1) { return; }
 
-        const item = that.items.find(i => i.id === data);
+        const item = that.filteredItems.find(i => i.id === data);
         if (item) {
-            const filteredItem = that.filteredItems.find(i => i.id === item.id);
-            if (filteredItem) { filteredItem.selected = true; }
+            if (item) { item.selected = true; }
             that.selection = String(item.title);
         }
     }
