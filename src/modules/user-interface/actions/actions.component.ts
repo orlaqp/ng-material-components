@@ -10,7 +10,7 @@ import { ActionsService } from './actions.service';
         [ngClass]="{ 'actions-alt': alt, 'dropdown': dropdown }"
         [class.actions]="!showBig"
         [class.top-menu]="showBig">
-            <li *ngFor="let item of actionItems" bwActionItem="item"></li>
+            <li *ngFor="let item of actionItems" [bwActionItem]="item"></li>
     </ul>
   `,
 })

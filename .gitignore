@@ -5,3 +5,6 @@ $ cat .gitignore
 
 *.log
 *.tgz
+
+src/.DS_Store
+ng-material-components

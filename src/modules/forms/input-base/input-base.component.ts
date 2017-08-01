@@ -151,9 +151,9 @@ export class InputBase {
             Validators.compose(validators));
 
         // subscribe for changes
-        // this.control.valueChanges.subscribe(data => {
-        //     console.log('value changed: ' + data);
-        // });
+        this.control.valueChanges.subscribe((data) => {
+            that.toggled = data !== undefined && data !== '';
+        });
 
         // because I am using an input mask control I need to pass this info
         // in order to treat the validators correctly (expect always two decimal places)

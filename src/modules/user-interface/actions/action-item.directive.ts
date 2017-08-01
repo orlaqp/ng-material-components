@@ -6,13 +6,13 @@ import { ActionsService } from './actions.service';
 @Directive({ selector: '[bwActionItem]' })
 export class ActionItemDirective implements AfterViewInit {
 
-    @Input() public actionItem: MenuItem;
+    @Input() public bwActionItem: MenuItem;
 
     constructor(private el: ElementRef, private renderer: Renderer, private actionsService: ActionsService) { }
 
     public ngAfterViewInit() {
         // add anchor
-        this._createAnchor(this.el.nativeElement, this.actionItem);
+        this._createAnchor(this.el.nativeElement, this.bwActionItem);
     }
 
     @HostListener('click', ['$event'])
@@ -20,7 +20,7 @@ export class ActionItemDirective implements AfterViewInit {
 
         $event.preventDefault();
 
-        const item: MenuItem = menuItem ? menuItem : this.actionItem;
+        const item: MenuItem = menuItem ? menuItem : this.bwActionItem;
 
         // only send notification when the item does not have children
         if (!item.children) {
@@ -69,11 +69,11 @@ export class ActionItemDirective implements AfterViewInit {
             this.renderer.setElementClass(ul, 'dm-icon', true);
             this.renderer.setElementClass(ul, 'dropdown-menu-right', true);
 
-            if (!this.actionItem || !this.actionItem.children) {
+            if (!this.bwActionItem || !this.bwActionItem.children) {
                 return;
             }
 
-            this.actionItem.children.forEach((item: MenuItem) => {
+            this.bwActionItem.children.forEach((item: MenuItem) => {
                 const li = this.renderer.createElement(ul, 'li');
 
                 this._createAnchor(li, item, true);

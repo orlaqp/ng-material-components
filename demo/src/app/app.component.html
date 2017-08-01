@@ -1,4 +1,4 @@
-<div class="layout-column">
+<div class="layout-column layout-padding">
     <div class="flex">{{title}}</div>
     <div class="flex">
         <bw-tab-set>
@@ -15,8 +15,35 @@
         </bw-tab-set>
     </div>
     <div class="flex">
-        <div class="m-t-20">
-            <bw-button color="blue" title="Button" icon="check" class="normal"></bw-button>
+        <div class="layout-row layout-padding">
+            <div class="flex">
+                <bw-button color="blue" title="Button" icon="check" class="normal"></bw-button>
+                <bw-button color="blue" [simple]="true" title="Simple" icon="close" class="normal"></bw-button>
+            </div>
         </div>
+    </div>
+    <div class="flex">
+        <form [formGroup]="fg">
+            <input type="text" formControlName="name">
+        </form>
+    </div>
+
+
+    <bw-text-box [fg]="fg" field="firstName" label="First Name"></bw-text-box>
+
+
+    <div class="flex">
+        <bw-card class="some-class">
+            <bw-card-header [padded]="true" color="white">
+                <h2>Simple Card</h2>
+                <bw-actions [actionItems]="actionItems">
+                </bw-actions>
+            </bw-card-header>
+            <bw-card-body [padded]="true">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget rutrum tellus. Duis augue elit, pretium quis commodo vel, fringilla sed tortor. Sed vulputate sem vitae augue faucibus commodo.
+                </p>
+            </bw-card-body>
+        </bw-card>
     </div>
 </div>
