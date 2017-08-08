@@ -22,7 +22,7 @@ import { AppComponent } from './app.component';
     HttpModule,
     MaterialUserInterfaceModule.forRoot(),
     MaterialFormsModule.forRoot(),
-    ArithmeticModule.forRoot(),
+    // ArithmeticModule.forRoot(),
   ],
   providers: [ SumService ],
   bootstrap: [AppComponent]
