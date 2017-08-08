@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
       setTimeout(function() {
         that.fg.controls['firstName'].setValue('Orlando');
         that.fg.controls['tarjet'].setValue('three');
-      }, 2000);
+      }, 3000);
   }
 
   public actionItems: any[] = [{

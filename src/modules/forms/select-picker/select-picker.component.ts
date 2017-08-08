@@ -1,3 +1,4 @@
+import { isArray } from 'util';
 /* tslint:disable */
 import { selectPickerTemplate } from './select-picker.template';
 import { Component, Input, ElementRef, OnChanges } from '@angular/core';
@@ -220,15 +221,28 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
 
     private _selectItemOnValueChanged(data: any) {
         const that = this;
-       
+        debugger;
         if (!data || data === '' ||
             !this.filteredItems || this.filteredItems.length < 1) { return; }
 
-        const item = that.filteredItems.find(i => i.id === data);
-        if (item) {
-            if (item) { item.selected = true; }
-            that.selection = String(item.title);
+        let dataItems: string[] = [];
+        let newSelection: string[] = [];
+        
+        if (typeof data === 'string') { // coma delimited string
+            dataItems = data.split(',');
+        } else if (isArray(data)) { // array of ids
+            dataItems = data.map(d => String(d));
         }
+
+        for (let i = 0; i < this.filteredItems.length; i++ ) {
+            let index = dataItems.find(e => e === that.filteredItems[i].id);
+            if (index) {
+                that.filteredItems[i].selected = true;
+                newSelection = newSelection.concat(String(that.filteredItems[i].title));
+            }
+        }
+        
+        that.selection = newSelection.join(',');
     }
 
 }
