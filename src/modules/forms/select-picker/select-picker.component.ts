@@ -221,7 +221,6 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
 
     private _selectItemOnValueChanged(data: any) {
         const that = this;
-        debugger;
         if (!data || data === '' ||
             !this.filteredItems || this.filteredItems.length < 1) { return; }
 
@@ -235,13 +234,13 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         }
 
         for (let i = 0; i < this.filteredItems.length; i++ ) {
-            let index = dataItems.find(e => e === that.filteredItems[i].id);
+            const index = dataItems.find(e => e === that.filteredItems[i].id);
             if (index) {
                 that.filteredItems[i].selected = true;
                 newSelection = newSelection.concat(String(that.filteredItems[i].title));
             }
         }
-        
+
         that.selection = newSelection.join(',');
     }
 
