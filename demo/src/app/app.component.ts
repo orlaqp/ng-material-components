@@ -1,3 +1,4 @@
+import { SelectionItem } from '../../..';
 import {
   FormControl,
   FormGroup
@@ -17,12 +18,18 @@ export class AppComponent implements OnInit {
   title = 'app works!';
   fg: FormGroup;
 
+  tarjetItems: SelectionItem[] = [
+    { id: 'one', title: 'one', selected: false, disabled: false},
+    { id: 'two', title: 'two', selected: false, disabled: false},
+    { id: 'three', title: 'three', selected: false, disabled: false},
+  ];
+
   ngOnInit() {
       this.fg = new FormGroup({
-            'name': new FormControl()
+            'name': new FormControl(),
+            'tarjet': new FormControl()
         });
 
-        
       this.fg.controls['name'].valueChanges.subscribe(v => {
           debugger;
           console.dir(v);
@@ -31,7 +38,8 @@ export class AppComponent implements OnInit {
       const that = this;
       setTimeout(function() {
         that.fg.controls['firstName'].setValue('Orlando');
-      }, 2000);
+        that.fg.controls['tarjet'].setValue('three');
+      }, 3000);
   }
 
   public actionItems: any[] = [{

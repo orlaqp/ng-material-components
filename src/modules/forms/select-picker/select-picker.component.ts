@@ -1,3 +1,4 @@
+import { isArray } from 'util';
 /* tslint:disable */
 import { selectPickerTemplate } from './select-picker.template';
 import { Component, Input, ElementRef, OnChanges } from '@angular/core';
@@ -94,13 +95,19 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
     }
 
     public ngOnInit(): void {
+        const that = this;
+
         this.onInit();
 
         this.query = new FormControl();
 
         this.query.valueChanges.subscribe(filter => {
-            this._filterResults(filter);
+            that._filterResults(filter);
         });
+
+        this.fg.controls[that.field].valueChanges.subscribe(data => {
+           that._selectItemOnValueChanged(data);
+        })
 
         this._updateValue();
     }
@@ -210,6 +217,31 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         }
 
         item.selected = !item.selected;
+    }
+
+    private _selectItemOnValueChanged(data: any) {
+        const that = this;
+        if (!data || data === '' ||
+            !this.filteredItems || this.filteredItems.length < 1) { return; }
+
+        let dataItems: string[] = [];
+        let newSelection: string[] = [];
+        
+        if (typeof data === 'string') { // coma delimited string
+            dataItems = data.split(',');
+        } else if (isArray(data)) { // array of ids
+            dataItems = data.map(d => String(d));
+        }
+
+        for (let i = 0; i < this.filteredItems.length; i++ ) {
+            const index = dataItems.find(e => e === that.filteredItems[i].id);
+            if (index) {
+                that.filteredItems[i].selected = true;
+                newSelection = newSelection.concat(String(that.filteredItems[i].title));
+            }
+        }
+
+        that.selection = newSelection.join(',');
     }
 
 }
