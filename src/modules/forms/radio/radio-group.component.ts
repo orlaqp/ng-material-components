@@ -1,7 +1,7 @@
 import { OnInit } from '@angular/core/core';
 // from here: https://github.com/pleerock/ng2-radio-group
 
-import { Component, Input, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { InputBase } from '../input-base/input-base.component';
 import { RadioGroupService } from './radio-group.service';
@@ -15,13 +15,15 @@ import { RadioGroupService } from './radio-group.service';
         </div>
     `,
 })
-export class RadioGroupComponent extends InputBase implements OnInit {
+export class RadioGroupComponent extends InputBase implements OnInit, AfterViewInit {
 
     @Input() public fg: FormGroup;
     @Input() public field: string;
     @Input() public disabled: boolean = false;
     @Input() public defaultValue: string;
     @Input() public alt: boolean;
+
+    private lastValueReceived: string;
 
     constructor(el: ElementRef, private service: RadioGroupService) {
         super(el);
@@ -40,6 +42,15 @@ export class RadioGroupComponent extends InputBase implements OnInit {
 
     public addValidators(): void {
         // nothign here
+    }
+
+    public ngAfterViewInit(): void {
+        const that = this;
+        this.control.valueChanges.subscribe((value) => {
+            if (that.lastValueReceived === value) { return; }
+            that.lastValueReceived = value;
+            that.service.announceSelectedOption(value);
+       });
     }
 
 }
