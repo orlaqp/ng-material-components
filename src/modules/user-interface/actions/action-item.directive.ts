@@ -20,6 +20,10 @@ export class ActionItemDirective implements AfterViewInit {
 
         $event.preventDefault();
 
+        if (!menuItem || !menuItem.active) {
+            return;
+        }
+
         const item: MenuItem = menuItem ? menuItem : this.bwActionItem;
 
         // only send notification when the item does not have children
