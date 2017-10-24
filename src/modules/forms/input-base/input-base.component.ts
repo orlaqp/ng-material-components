@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs/Subscription';
 import { ElementRef } from '@angular/core';
 import {
     FormGroup,
@@ -45,6 +46,8 @@ export class InputBase {
     public ele: ElementRef;
 
     public initialized = false;
+
+    private __valueChangeSubscription: Subscription;
 
     constructor(el: ElementRef) {
         this.ele = el;
@@ -144,21 +147,25 @@ export class InputBase {
             this.value = '';
         }
 
-        const validators: any = this._getValidators();
-        this.control = new ControlWithType(
-            this.dataType,
-            this.value,
-            Validators.compose(validators));
+        this.control = this.fg.get(this.field) as ControlWithType;
+
+        if (!this.control) {
+            const validators: any = this._getValidators();
+            this.control = new ControlWithType(
+                this.dataType,
+                this.value,
+                Validators.compose(validators));
+
+            // because I am using an input mask control I need to pass this info
+            // in order to treat the validators correctly (expect always two decimal places)
+            this.control.__isDecimal = this.decimal;
+            fg.addControl(fieldName, this.control);
+        }
 
         // subscribe for changes
-        this.control.valueChanges.subscribe((data) => {
+        this.__valueChangeSubscription = this.control.valueChanges.subscribe((data) => {
             that.toggled = data !== undefined && data !== '';
         });
-
-        // because I am using an input mask control I need to pass this info
-        // in order to treat the validators correctly (expect always two decimal places)
-        this.control.__isDecimal = this.decimal;
-        fg.addControl(fieldName, this.control);
 
         // if (!this.required) {
         //     fg.exclude(fieldName);

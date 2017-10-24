@@ -1,5 +1,42 @@
 <div class="layout-column layout-padding">
     <div class="flex">{{title}}</div>
+
+    <div class="flex">
+        <pre>
+            {{ fg.value | json }}
+        </pre>
+    </div>
+
+    <div class="flex">
+        <div class="layout-row">
+
+            <div class="flex">
+                    <bw-select-picker [fg]="fg"
+                    field="category"
+                    label="Category"
+                    [multiple]="false"
+                    [liveSearch]="true"
+                    [items]="categories"
+                    liveSearchPlaceholder="... type to seach ..."
+                    liveSearchStyle="startsWith">
+                </bw-select-picker>
+            </div>
+           
+            <div class="flex">
+                    <bw-select-picker [fg]="fg"
+                    field="product"
+                    label="Product"
+                    dependOnField="category"
+                    (dependantValueChanged)="updateProductItems($event)"
+                    [liveSearch]="true"
+                    [items]="productItems"
+                    liveSearchPlaceholder="... type to seach ..."
+                    liveSearchStyle="startsWith">
+                </bw-select-picker>
+            </div>
+
+        </div>
+    </div>
     <div class="flex">
         <bw-tab-set>
             <bwTab heading='Tab 1'>

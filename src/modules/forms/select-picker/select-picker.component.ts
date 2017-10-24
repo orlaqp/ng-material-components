@@ -1,13 +1,32 @@
-import { isArray } from 'util';
+import {
+    Subscription
+} from 'rxjs/Rx';
+import {
+    isArray
+} from 'util';
 /* tslint:disable */
-import { selectPickerTemplate } from './select-picker.template';
-import { Component, Input, ElementRef, OnChanges } from '@angular/core';
+import {
+    selectPickerTemplate
+} from './select-picker.template';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    Output
+} from '@angular/core';
 import {
     FormGroup,
     FormControl,
 } from '@angular/forms';
-import { SelectionItem } from '../../../models/selection-item';
-import { InputBase } from '../input-base/input-base.component';
+import {
+    SelectionItem
+} from '../../../models/selection-item';
+import {
+    InputBase
+} from '../input-base/input-base.component';
 declare var $: any;
 
 import {
@@ -20,15 +39,17 @@ processPolyfills();
     selector: 'bw-select-picker',
     template: selectPickerTemplate,
 })
-export class SelectPickerComponent extends InputBase implements OnChanges {
+export class SelectPickerComponent extends InputBase implements OnChanges, OnDestroy {
 
     @Input() public fg: FormGroup;
     @Input() public field: string;
+    @Input() public value: string;
     @Input() public disabled: boolean;
     @Input() public placeholder: string;
     @Input() public alt: boolean;
     @Input() public leftIcon: string;
     @Input() public rightIcon: string;
+    @Input() public dependOnField: string;
 
     // options
     @Input() public items: SelectionItem[];
@@ -44,6 +65,8 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
     @Input() public maxOptions: number = 100;
     @Input() public isMobile: boolean = false;
     @Input() public tickIcon: string = 'zmdi-check';
+
+    @Output() public dependantValueChanged = new EventEmitter < string > ()
 
 
     // @Input() selectAllText: string = 'Select All';
@@ -75,10 +98,13 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
 
     open: boolean = false;
     filteredItems: SelectionItem[];
-    selection: string;
+    selection = this.noneSelectedText;
     query: FormControl;
 
     private _clonedItems: SelectionItem[];
+    private _dependOnFieldSubscription: Subscription;
+    private _querySubscription: Subscription;
+    private _lastValue: any;
 
     // @Input() countSelectedText: Function = (numSelected: number, numTotal: number) => {
     //     return (numSelected === 1) ? '{0} item selected' : '{0} items selected';
@@ -101,26 +127,48 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
 
         this.query = new FormControl();
 
-        this.query.valueChanges.subscribe(filter => {
+        // watch filter changes
+        this._querySubscription = this.query.valueChanges.subscribe(filter => {
             that._filterResults(filter);
         });
 
-        this.fg.controls[that.field].valueChanges.subscribe(data => {
-           that._selectItemOnValueChanged(data);
-        })
+        // watch value changes
+        this.control.valueChanges.subscribe(data => {
+            if (data) {
+                this._lastValue = data;
+            }
+            that._updateSelection();
+        });
 
-        this._updateValue();
+        // if this control depend on another field then listen for changes on it
+        if (this.dependOnField) {
+            const formField = this.fg.get(this.dependOnField);
+
+            if (formField) {
+                this._dependOnFieldSubscription = formField.valueChanges
+                    .subscribe(v => {
+                        that.dependantValueChanged.emit(v);
+                    });
+            }
+        }
     }
 
-    public ngOnChanges(changes: {[propertyName: string]: any}) {
+    public ngOnDestroy() {
+        this._dependOnFieldSubscription.unsubscribe();
+        this._querySubscription.unsubscribe();
+    }
+
+    public ngOnChanges(changes: {
+        [propertyName: string]: any
+    }) {
         let that = this;
 
         if (changes['items']) {
             let clone: SelectionItem[] = [];
 
-            let currentValue = changes['items'].currentValue;
-            if (currentValue) {
-                clone = currentValue.map((item: SelectionItem) => {
+            let newItemList = changes['items'].currentValue;
+            if (newItemList) {
+                clone = newItemList.map((item: SelectionItem) => {
                     return {
                         id: item.id,
                         title: item.title,
@@ -131,13 +179,7 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
             }
 
             that._clonedItems = clone;
-            this._updateSelectionText();
-
-            if (this.initialized) {
-                this._updateValue();
-            }
-
-            this._filterResults(null);
+            this._updateSelection()
         }
     }
 
@@ -156,31 +198,24 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
             });
 
             item.selected = !item.selected;
+            this.control.setValue(item.id);
         } else {
             this._processMultipleSelection(item);
         }
-
-        this._updateSelectionText();
-        this._updateValue();
     }
 
-    public addValidators(): void { }
-
-    private _updateValue() {
-        let selectedItems = this._clonedItems
-            .filter(item => item.selected)
-            .map(item => item.id);
-        let values = selectedItems.join(',');
-        this.control.setValue(values);
-        this.value = values;
-    }
+    public addValidators(): void {}
 
     private _updateSelectionText() {
 
         if (this._clonedItems) {
             this.selection = this._clonedItems
-                .filter(item => { return item.selected; })
-                .map(item => { return item.title; })
+                .filter(item => {
+                    return item.selected;
+                })
+                .map(item => {
+                    return item.title;
+                })
                 .join(this.multipleSeparator);
         }
 
@@ -197,7 +232,9 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         } else {
             this.filteredItems = this._clonedItems.filter(item => {
 
-                if (!item || !item.title) { return false; }
+                if (!item || !item.title) {
+                    return false;
+                }
 
                 return contains ?
                     item.title.toLowerCase().includes(filter.toLowerCase()) :
@@ -217,31 +254,61 @@ export class SelectPickerComponent extends InputBase implements OnChanges {
         }
 
         item.selected = !item.selected;
+
+        const newSelectedItemIds = this._clonedItems
+            .filter(i => i.selected)
+            .map(i => i.id)
+            .join(',');
+
+        this.control.setValue(newSelectedItemIds);
     }
 
-    private _selectItemOnValueChanged(data: any) {
+    private _updateSelection() {
         const that = this;
-        if (!data || data === '' ||
-            !this.filteredItems || this.filteredItems.length < 1) { return; }
+        let value = this.control ? this.control.value : null || this.value;
+
+        if (this._lastValue && !value) {
+            value = this._lastValue;
+        }
+
+        if (!value || value === '' ||
+            !this._clonedItems || this._clonedItems.length < 1) {
+            return;
+        }
 
         let dataItems: string[] = [];
         let newSelection: string[] = [];
-        
-        if (typeof data === 'string') { // coma delimited string
-            dataItems = data.split(',');
-        } else if (isArray(data)) { // array of ids
-            dataItems = data.map(d => String(d));
+
+        if (typeof value === 'string') { // coma delimited string
+            dataItems = value.split(',');
+        } else if (isArray(value)) { // array of ids
+            dataItems = value.map(d => String(d));
         }
 
-        for (let i = 0; i < this.filteredItems.length; i++ ) {
-            const index = dataItems.find(e => e === that.filteredItems[i].id);
+        if (!this.multiple) {
+            this._clonedItems.forEach(i => i.selected = false);
+        }
+
+        for (let i = 0; i < this._clonedItems.length; i++) {
+            const index = dataItems.find(e => e === that._clonedItems[i].id);
             if (index) {
-                that.filteredItems[i].selected = true;
-                newSelection = newSelection.concat(String(that.filteredItems[i].title));
+                that._clonedItems[i].selected = true;
+                newSelection = newSelection.concat(String(that._clonedItems[i].title));
             }
         }
 
-        that.selection = newSelection.join(',');
+        // remove the current value if does not apply anymore
+        const newValueCheckedAgainstItems = that._clonedItems
+            .filter(i => i.selected)
+            .map(i => i.id)
+            .join(',');
+
+        if (this.control.value !== newValueCheckedAgainstItems) {
+            this.control.setValue(newValueCheckedAgainstItems, { emitEvent: false });
+        }
+
+        this._updateSelectionText();
+        this._filterResults(this.query ? this.query.value : null);
     }
 
 }
