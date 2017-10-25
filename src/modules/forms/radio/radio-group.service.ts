@@ -10,15 +10,11 @@ export class RadioGroupService {
 
     private optionSelectedSource = new Subject<string>();
 
-    announceSelectedOption(value: string) {
+    public announceSelectedOption(value: string) {
         this.optionSelectedSource.next(value);
     }
 
     get optionSelected$(): Observable<string> {
         return this.optionSelectedSource.asObservable();
     }
-
-    constructor() {
-    }
-
 }
