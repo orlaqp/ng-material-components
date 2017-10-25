@@ -154,8 +154,8 @@ export class SelectPickerComponent extends InputBase implements OnChanges, OnDes
     }
 
     public ngOnDestroy() {
-        this._dependOnFieldSubscription.unsubscribe();
-        this._querySubscription.unsubscribe();
+        if (this._dependOnFieldSubscription) this._dependOnFieldSubscription.unsubscribe();
+        if (this._querySubscription) this._querySubscription.unsubscribe();
     }
 
     public ngOnChanges(changes: {
@@ -266,6 +266,8 @@ export class SelectPickerComponent extends InputBase implements OnChanges, OnDes
     private _updateSelection() {
         const that = this;
         let value = this.control ? this.control.value : null || this.value;
+        
+        this._filterResults(this.query ? this.query.value : null);
 
         if (this._lastValue && !value) {
             value = this._lastValue;
@@ -308,7 +310,7 @@ export class SelectPickerComponent extends InputBase implements OnChanges, OnDes
         }
 
         this._updateSelectionText();
-        this._filterResults(this.query ? this.query.value : null);
+       
     }
 
 }

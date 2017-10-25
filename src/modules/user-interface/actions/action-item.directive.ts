@@ -19,8 +19,9 @@ export class ActionItemDirective implements AfterViewInit {
     public onActionClicked($event: MouseEvent, menuItem?: MenuItem): void {
 
         $event.preventDefault();
+        menuItem = menuItem || this.bwActionItem;
 
-        if (!menuItem || !menuItem.active) {
+        if (!menuItem || (menuItem.hasOwnProperty('active') && menuItem.active === false)) {
             return;
         }
 
