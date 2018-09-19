@@ -1,3 +1,5 @@
+I no longer maintain this package so this repository is **deprecated**
+
 Thanks to:
 
 https://github.com/robisim74/angular-library-starter
